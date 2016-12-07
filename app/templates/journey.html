@@ -1,5 +1,31 @@
 {% extends "base.html" %}
+
 {% block page_title %}Journey: {{ journey.name }}{% endblock %}
+
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journey.css') }}"/>
+{% endblock %}
+
+{% block js %}
+    {{ super() }}
+    <script>
+        var startCoords = {lat: {{ journey.start.lat }}, lng: {{ journey.start.lng }}};
+        var finishCoords = {lat: {{ journey.finish.lat }}, lng: {{ journey.finish.lng }}};
+        var stages = {{ journey.stages }};
+        var newDistance = 0;
+    </script>
+    <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
+    {% with %}
+        {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
+        {% set key = config.GOOGLE_MAPS_API_KEY %}
+        {% set libraries = "geometry" %}
+        {% set callback = "initMap" %}
+        <script async defer
+                src="{{ base_url }}?key={{ key }}&libraries={{ libraries }}&callback={{ callback }}"></script>
+    {% endwith %}
+{% endblock %}
+
 {% block page_content %}
     <div class="well">
         Start: {{ journey.start }}<br/>
@@ -7,7 +33,10 @@
         Stages: {{ journey.stages }}<br/>
     </div>
 
+    <div id="map"></div>
+
     <div>
+        <br/>
         <a class="btn btn-primary" href="/todo">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             <span>Add/record new stage/run</span>
