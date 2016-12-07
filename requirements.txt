@@ -1,1 +1,2 @@
 Flask==0.11
+Flask-WTF==0.13.1

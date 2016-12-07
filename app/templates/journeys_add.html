@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block page_title %}Create new journey{% endblock %}
+{% block page_content %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            <span>Name:</span>
+            {{ form.name }}
+            {% for error in form.name.errors %}
+                <em>{{ error }}</em>
+            {% endfor %}
+        </p>
+        <p>
+            <span>Start (Lat):</span>
+            {{ form.startLat }}
+            {% for error in form.startLat.errors %}
+                <em>{{ error }}</em>
+            {% endfor %}
+        </p>
+        <p>
+            <span>Start (Lng):</span>
+            {{ form.startLng }}
+            {% for error in form.startLng.errors %}
+                <em>{{ error }}</em>
+            {% endfor %}
+        </p>
+        <p>
+            <span>Finish (Lat):</span>
+            {{ form.finishLat }}
+            {% for error in form.finishLat.errors %}
+                <em>{{ error }}</em>
+            {% endfor %}
+        </p>
+        <p>
+            <span>Finish (Lng):</span>
+            {{ form.finishLng }}
+            {% for error in form.finishLng.errors %}
+                <em>{{ error }}</em>
+            {% endfor %}
+        </p>
+        </p><input type="submit" value="Submit"/></p>
+    </form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block page_title %}{{ journey.name }}{% endblock %}
+{% block page_content %}
+    Start: {{ journey.start }}<br/>
+    Finish: {{ journey.finish }}<br/>
+    Stages: {{ journey.stages }}<br/>
+
+    <div>
+        <a href="/todo">Add new stage/run</a>
+    </div>
+{% endblock %}

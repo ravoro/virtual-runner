@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
+    {% block css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}">
+    {% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div id="navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="page-header">
+        <h1>{{ self.page_title() }}</h1>
+    </div>
+
+    {% with flash_messages = get_flashed_messages() %}
+        {% if flash_messages %}
+            <p>Flash messages:</p>
+            <ul>
+                {% for message in flash_messages %}
+                    <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% block page_content %}{% endblock %}
+</div>
+
+{% block js %}
+    {#<script src="{{ url_for('static', filename='lib/jquery-3.1.1.min.js') }}"></script>#}
+    {#<script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>#}
+{% endblock %}
+</body>
+</html>
