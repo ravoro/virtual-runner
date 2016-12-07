@@ -2,15 +2,29 @@
 {% block page_title %}Journeys{% endblock %}
 {% block page_content %}
     {% if journeys %}
-        <ul>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for journey in journeys %}
-                <li><a href="{{ url_for("journey", jid=journey.id) }}">{{ journey.name }}</a></li>
+                <tr>
+                    <td>{{ journey.id }}</td>
+                    <td><a href="{{ url_for("journey", jid=journey.id) }}">{{ journey.name }}</a></td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     {% else %}
         <em>No journeys created.</em>
     {% endif %}
     <div>
-        <a href="{{ url_for("journeys_add") }}">Create new journey</a>
+        <a class="btn btn-primary" href="{{ url_for("journeys_add") }}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <span>Create new journey</span>
+        </a>
     </div>
 {% endblock %}

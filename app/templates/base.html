@@ -8,33 +8,16 @@
     {% endblock %}
 </head>
 <body>
-
-<nav class="navbar navbar-default">
-    <div class="container">
-        <div id="navbar">
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+{% include "header.html" %}
 
 <div class="container">
     <div class="page-header">
         <h1>{{ self.page_title() }}</h1>
     </div>
 
-    {% with flash_messages = get_flashed_messages() %}
-        {% if flash_messages %}
-            <p>Flash messages:</p>
-            <ul>
-                {% for message in flash_messages %}
-                    <li>{{ message }} </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
 
     {% block page_content %}{% endblock %}
 </div>
