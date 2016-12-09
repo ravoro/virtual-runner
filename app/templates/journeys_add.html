@@ -1,5 +1,31 @@
 {% extends 'base.html' %}
+
 {% block page_title %}Create new journey{% endblock %}
+
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') }}"/>
+{% endblock %}
+
+{% block js %}
+    {{ super() }}
+    <script>
+        var defaultCoords = {lat: 51.5, lng: 0};
+        {% macro coords(lat, lng) -%}
+            {{ "{lat: %s, lng: %s}"|format(lat, lng) if lat != None and lng != None else "null" }}
+        {%- endmacro %}
+        var startCoords = {{ coords(form.start_lat.data, form.start_lng.data) }};
+        var finishCoords = {{ coords(form.finish_lat.data, form.finish_lng.data) }};
+    </script>
+    <script src="{{ url_for('static', filename='js/journeys_add.js') }}"></script>
+    {% with %}
+        {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
+        {% set key = config.GOOGLE_MAPS_API_KEY %}
+        {% set callback = "initMap" %}
+        <script async defer src="{{ base_url }}?key={{ key }}&callback={{ callback }}"></script>
+    {% endwith %}
+{% endblock %}
+
 {% block page_content %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
@@ -16,13 +42,23 @@
 
         {{ field(form.name, "Name: ") }}
 
-        {{ field(form.startLat, "Start (Lat): ") }}
+        {% macro fieldMap(lat, lng, label, map_id, lat_id, lng_id) %}
+            {% with has_errors = lat.errors or lng.errors %}
+                <div class="form-group {% if has_errors %}has-error{% endif %}">
+                    <label>{{ label }}</label>
+                    <div id="{{ map_id }}" class="form-control"></div>
+                    {{ lat(id=lat_id, class="form-control", type="hidden") }}
+                    {{ lng(id=lng_id, class="form-control", type="hidden") }}
+                    {% if has_errors %}
+                        <span class="help-block">Click on the map to select a location.</span>
+                    {% endif %}
+                </div>
+            {% endwith %}
+        {% endmacro %}
 
-        {{ field(form.startLng, "Start (Lng): ") }}
+        {{ fieldMap(form.start_lat, form.start_lng, "Start:", "map-start", "startLat", "startLng") }}
 
-        {{ field(form.finishLat, "Finish (Lat): ") }}
-
-        {{ field(form.finishLng, "Finish (Lng): ") }}
+        {{ fieldMap(form.finish_lat, form.finish_lng, "Finish:", "map-finish", "finishLat", "finishLng") }}
 
         <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
     </form>
