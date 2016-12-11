@@ -10,9 +10,9 @@
 {% block js %}
     {{ super() }}
     <script>
-        var startCoords = {lat: {{ journey.start.lat }}, lng: {{ journey.start.lng }}};
-        var finishCoords = {lat: {{ journey.finish.lat }}, lng: {{ journey.finish.lng }}};
-        var stages = {{ journey.stages }};
+        var startCoords = {lat: {{ journey.start_lat }}, lng: {{ journey.start_lng }}};
+        var finishCoords = {lat: {{ journey.finish_lat }}, lng: {{ journey.finish_lng }}};
+        var stages = {{ journey.stages|default([]) }};
         var newDistance = 0;
     </script>
     <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
@@ -27,14 +27,7 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="well">
-        Start: {{ journey.start }}<br/>
-        Finish: {{ journey.finish }}<br/>
-        Stages: {{ journey.stages }}<br/>
-    </div>
-
     <div id="map"></div>
-
     <div>
         <br/>
         <a class="btn btn-primary" href="/todo">

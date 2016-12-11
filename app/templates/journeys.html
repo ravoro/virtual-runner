@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% block page_title %}Journeys{% endblock %}
+
 {% block page_content %}
     {% if journeys %}
         <table class="table">
@@ -19,7 +21,7 @@
             </tbody>
         </table>
     {% else %}
-        <em>No journeys created.</em>
+        <p><em>No journeys created.</em></p>
     {% endif %}
     <div>
         <a class="btn btn-primary" href="{{ url_for("journeys_add") }}">

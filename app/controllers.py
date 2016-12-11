@@ -1,9 +1,9 @@
 from flask import flash
 from flask import url_for, redirect, render_template
 
-from app import app
+from app import app, db
 from .forms import JourneysAddForm
-from .models import mockDB, Journey, Coord
+from .models import Journey
 
 
 @app.route('/')
@@ -13,26 +13,30 @@ def home():
 
 @app.route('/journeys/<int:jid>')
 def journey(jid):
-    return render_template('journey.html', journey=mockDB.get(jid))
+    journey = Journey.query.get(jid)
+    return render_template('journey.html', journey=journey)
 
 
 @app.route('/journeys')
 def journeys():
-    return render_template('journeys.html', journeys=mockDB.values())
+    journeys = Journey.query.all()
+    return render_template('journeys.html', journeys=journeys)
 
 
 @app.route('/journeys/add', methods=['GET', 'POST'])
 def journeys_add():
     form = JourneysAddForm()
     if form.validate_on_submit():
-        id = max(mockDB.keys()) + 1
-        mockDB[id] = Journey(
-            id,
+        journey = Journey(
             str(form.name.data),
-            Coord(float(form.start_lat.data), float(form.start_lng.data)),
-            Coord(float(form.finish_lat.data), float(form.finish_lng.data)),
-            []
+            float(form.start_lat.data),
+            float(form.start_lng.data),
+            float(form.finish_lat.data),
+            float(form.finish_lng.data)
         )
+        db.session.add(journey)
+        db.session.commit()
+
         flash('Successfully created new journey.')
-        return redirect(url_for('journey', jid=id))
+        return redirect(url_for('journey', jid=journey.id))
     return render_template('journeys_add.html', form=form)
