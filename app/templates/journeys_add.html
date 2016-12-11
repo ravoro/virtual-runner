@@ -1,3 +1,5 @@
+{% from 'fields.html' import field, field_map %}
+
 {% extends 'base.html' %}
 
 {% block page_title %}Create new journey{% endblock %}
@@ -27,38 +29,14 @@
 {% endblock %}
 
 {% block page_content %}
-    <form action="" method="post">
+    <form method="post">
         {{ form.hidden_tag() }}
-
-        {% macro field(f, label=None) %}
-            <div class="form-group {% if f.errors %}has-error{% endif %}">
-                {{ f.label(label) }}
-                {{ f(class="form-control") }}
-                {% for error in f.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% endmacro %}
 
         {{ field(form.name, "Name: ") }}
 
-        {% macro fieldMap(lat, lng, label, map_id, lat_id, lng_id) %}
-            {% with has_errors = lat.errors or lng.errors %}
-                <div class="form-group {% if has_errors %}has-error{% endif %}">
-                    <label>{{ label }}</label>
-                    <div id="{{ map_id }}" class="form-control"></div>
-                    {{ lat(id=lat_id, class="form-control", type="hidden") }}
-                    {{ lng(id=lng_id, class="form-control", type="hidden") }}
-                    {% if has_errors %}
-                        <span class="help-block">Click on the map to select a location.</span>
-                    {% endif %}
-                </div>
-            {% endwith %}
-        {% endmacro %}
+        {{ field_map(form.start_lat, form.start_lng, "Start:", "map-start", "startLat", "startLng") }}
 
-        {{ fieldMap(form.start_lat, form.start_lng, "Start:", "map-start", "startLat", "startLng") }}
-
-        {{ fieldMap(form.finish_lat, form.finish_lng, "Finish:", "map-finish", "finishLat", "finishLng") }}
+        {{ field_map(form.finish_lat, form.finish_lng, "Finish:", "map-finish", "finishLat", "finishLng") }}
 
         <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
     </form>

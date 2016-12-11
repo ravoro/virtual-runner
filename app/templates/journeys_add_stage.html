@@ -1,0 +1,15 @@
+{% from 'fields.html' import field %}
+
+{% extends 'base.html' %}
+
+{% block page_title %}Add new stage{% endblock %}
+
+{% block page_content %}
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        {{ field(form.distance, addon="meters") }}
+
+        <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+    </form>
+{% endblock %}

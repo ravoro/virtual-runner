@@ -12,7 +12,7 @@
     <script>
         var startCoords = {lat: {{ journey.start_lat }}, lng: {{ journey.start_lng }}};
         var finishCoords = {lat: {{ journey.finish_lat }}, lng: {{ journey.finish_lng }}};
-        var stages = {{ journey.stages|default([]) }};
+        var stages = {{ journey.stages_to_distances|default([]) }};
         var newDistance = 0;
     </script>
     <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
@@ -30,7 +30,7 @@
     <div id="map"></div>
     <div>
         <br/>
-        <a class="btn btn-primary" href="/todo">
+        <a class="btn btn-primary" href="{{ url_for('journeys_add_stage', jid=journey.id) }}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             <span>Add/record new stage/run</span>
         </a>

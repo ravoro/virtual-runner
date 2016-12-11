@@ -8,14 +8,20 @@ class Journey(db.Model):
     start_lng = db.Column(db.Float)
     finish_lat = db.Column(db.Float)
     finish_lng = db.Column(db.Float)
+    stages = db.relationship('Stage', backref='journey')
 
-    def __init__(self, name, start_lat, start_lng, finish_lat, finish_lng):
-        self.name = name
-        self.start_lat = start_lat
-        self.start_lng = start_lng
-        self.finish_lat = finish_lat
-        self.finish_lng = finish_lng
+    @property
+    def stages_to_distances(self):
+        return [s.distance for s in self.stages]
 
     def __repr__(self):
-        return '<User {} | {} | ({}, {}) | ({}, {})>'.format(
-            self.id, self.name, self.start_lat, self.start_lng, self.finish_lat, self.finish_lng)
+        return '<Journey id={}>'.format(self.id)
+
+
+class Stage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    distance = db.Column(db.Integer)
+    journey_id = db.Column(db.Integer, db.ForeignKey('journey.id'))
+
+    def __repr__(self):
+        return '<Stage id={}>'.format(self.id)

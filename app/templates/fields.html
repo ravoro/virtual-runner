@@ -1,0 +1,34 @@
+{% macro field(f, label=None, addon=None) %}
+    <div class="form-group {% if f.errors %}has-error{% endif %}">
+        {{ f.label(label) }}
+        {{ form_control_with_addon(f(class="form-control"), addon) }}
+        {% for error in f.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro form_control_with_addon(f, addon) %}
+    {% if addon %}
+        <div class="input-group">
+            {{ f }}
+            <div class="input-group-addon">{{ addon }}</div>
+        </div>
+    {% else %}
+        {{ f }}
+    {% endif %}
+{% endmacro %}
+
+{% macro field_map(lat, lng, label, map_id, lat_id, lng_id) %}
+    {% with has_errors = lat.errors or lng.errors %}
+        <div class="form-group {% if has_errors %}has-error{% endif %}">
+            <label>{{ label }}</label>
+            <div id="{{ map_id }}" class="form-control"></div>
+            {{ lat(id=lat_id, class="form-control", type="hidden") }}
+            {{ lng(id=lng_id, class="form-control", type="hidden") }}
+            {% if has_errors %}
+                <span class="help-block">Click on the map to select a location.</span>
+            {% endif %}
+        </div>
+    {% endwith %}
+{% endmacro %}
