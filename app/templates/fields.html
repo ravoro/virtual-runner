@@ -1,7 +1,7 @@
-{% macro field(f, label=None, addon=None) %}
+{% macro field(f, label=None, placeholder="", addon=None) %}
     <div class="form-group {% if f.errors %}has-error{% endif %}">
         {{ f.label(label) }}
-        {{ form_control_with_addon(f(class="form-control"), addon) }}
+        {{ form_control_with_addon(f(class="form-control", placeholder=placeholder, autofocus=""), addon) }}
         {% for error in f.errors %}
             <span class="help-block">{{ error }}</span>
         {% endfor %}

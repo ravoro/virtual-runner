@@ -2,19 +2,26 @@
 
 {% block page_title %}Journeys{% endblock %}
 
+{% block body_id %}page-journeys{% endblock %}
+
+{% block page_actions %}
+    <a class="btn btn-primary" href="{{ url_for("journeys_add") }}">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <span>Create a new journey</span>
+    </a>
+{% endblock %}
+
 {% block page_content %}
     {% if journeys %}
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
             </tr>
             </thead>
             <tbody>
             {% for journey in journeys %}
                 <tr>
-                    <td>{{ journey.id }}</td>
                     <td><a href="{{ url_for("journey", jid=journey.id) }}">{{ journey.name }}</a></td>
                 </tr>
             {% endfor %}
@@ -23,10 +30,4 @@
     {% else %}
         <p><em>No journeys created.</em></p>
     {% endif %}
-    <div>
-        <a class="btn btn-primary" href="{{ url_for("journeys_add") }}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <span>Create new journey</span>
-        </a>
-    </div>
 {% endblock %}

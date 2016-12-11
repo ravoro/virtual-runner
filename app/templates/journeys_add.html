@@ -2,7 +2,9 @@
 
 {% extends 'base.html' %}
 
-{% block page_title %}Create new journey{% endblock %}
+{% block page_title %}Create a new journey{% endblock %}
+
+{% block body_id %}page-journeys-add{% endblock %}
 
 {% block css %}
     {{ super() }}
@@ -26,6 +28,10 @@
         {% set callback = "initMap" %}
         <script async defer src="{{ base_url }}?key={{ key }}&callback={{ callback }}"></script>
     {% endwith %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{{ url_for('journeys') }}">Journeys</a></li>
 {% endblock %}
 
 {% block page_content %}

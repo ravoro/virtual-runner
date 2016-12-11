@@ -56,4 +56,4 @@ def journeys_add_stage(jid):
 
         flash('Successfully added new stage.')
         return redirect(url_for('journey', jid=journey.id))
-    return render_template('journeys_add_stage.html', form=form)
+    return render_template('journeys_add_stage.html', journey=journey, form=form)

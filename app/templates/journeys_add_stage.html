@@ -2,13 +2,20 @@
 
 {% extends 'base.html' %}
 
-{% block page_title %}Add new stage{% endblock %}
+{% block page_title %}Record a new run{% endblock %}
+
+{% block body_id %}page-journeys-add-stage{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{{ url_for('journeys') }}">Journeys</a></li>
+    <li><a href="{{ url_for('journey', jid=journey.id) }}">{{ journey.name }}</a></li>
+{% endblock %}
 
 {% block page_content %}
     <form method="post">
         {{ form.hidden_tag() }}
 
-        {{ field(form.distance, addon="meters") }}
+        {{ field(form.distance, label=" ", placeholder="Distance in meters", addon="meters") }}
 
         <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
     </form>

@@ -5,22 +5,41 @@
     <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
     {% block css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"/>
     {% endblock %}
 </head>
-<body>
-{% include "header.html" %}
-
-<div class="container">
-    <div class="page-header">
-        <h1>{{ self.page_title() }}</h1>
+<body id="{% block body_id %}{% endblock %}" class="{% block body_classes %}{% endblock %}">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8">
+                <ol class="breadcrumb">
+                    {% block breadcrumbs %}{% endblock %}
+                    <li class="active">{{ self.page_title() }}</li>
+                </ol>
+            </div>
+            <div class="col-xs-4">
+                <div class="page-actions">
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+        </div>
     </div>
+</nav>
 
+<div class="flash-messages container">
     {% for message in get_flashed_messages() %}
         <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
-
-    {% block page_content %}{% endblock %}
 </div>
+
+{% with content = self.page_content() %}
+    {% if content_without_container %}
+        {{ content }}
+    {% else %}
+        <div class="container">{{ content }}</div>
+    {% endif %}
+{% endwith %}
 
 {% block js %}
     {#<script src="{{ url_for('static', filename='lib/jquery-3.1.1.min.js') }}"></script>#}

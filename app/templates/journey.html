@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
-{% block page_title %}Journey: {{ journey.name }}{% endblock %}
+{% set content_without_container = True %}
+
+{% block page_title %}{{ journey.name }}{% endblock %}
+
+{% block body_id %}page-journey{% endblock %}
 
 {% block css %}
     {{ super() }}
@@ -26,13 +30,17 @@
     {% endwith %}
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li><a href="{{ url_for('journeys') }}">Journeys</a></li>
+{% endblock %}
+
+{% block page_actions %}
+    <a class="btn btn-primary" href="{{ url_for('journeys_add_stage', jid=journey.id) }}">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <span>Record a new run</span>
+    </a>
+{% endblock %}
+
 {% block page_content %}
     <div id="map"></div>
-    <div>
-        <br/>
-        <a class="btn btn-primary" href="{{ url_for('journeys_add_stage', jid=journey.id) }}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <span>Add/record new stage/run</span>
-        </a>
-    </div>
 {% endblock %}

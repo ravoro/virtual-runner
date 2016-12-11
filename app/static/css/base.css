@@ -1,0 +1,28 @@
+body {
+    padding-top: 70px;
+}
+
+.container {
+    width: 970px;
+}
+
+.navbar .breadcrumb {
+    background: none;
+    font-size: 20px;
+    margin: 0;
+    padding: 15px;
+}
+
+.navbar .breadcrumb .active {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .page-actions {
+    padding: 15px;
+    text-align: right;
+}
+
+#page-journeys-add-stage form {
+    width: 300px;
+}
