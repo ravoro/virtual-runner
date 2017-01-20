@@ -6,3 +6,4 @@ app.config.from_object("config.ProdConfig")
 db = SQLAlchemy(app)
 
 from app import controllers, models
+from app.templates.utils import filters

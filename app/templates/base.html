@@ -5,7 +5,7 @@
     <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
     {% block css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') | asset_release_version }}"/>
     {% endblock %}
 </head>
 <body id="{% block body_id %}{% endblock %}" class="{% block body_classes %}{% endblock %}">

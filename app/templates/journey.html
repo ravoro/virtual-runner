@@ -8,7 +8,7 @@
 
 {% block css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/journey.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journey.css') | asset_release_version }}"/>
 {% endblock %}
 
 {% block js %}
@@ -19,7 +19,7 @@
         var stagesDistance = {{ journey.completed_distance }};
         var totalDistance = {{ journey.distance_meters }};
     </script>
-    <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/journey.js') | asset_release_version }}"></script>
     {% with %}
         {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
         {% set key = config.GOOGLE_MAPS_API_KEY %}

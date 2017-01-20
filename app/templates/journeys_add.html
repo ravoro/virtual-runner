@@ -1,4 +1,4 @@
-{% from 'fields.html' import field, field_map %}
+{% from 'utils/fields.html' import field, field_map %}
 
 {% extends 'base.html' %}
 
@@ -8,7 +8,7 @@
 
 {% block css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') | asset_release_version }}"/>
 {% endblock %}
 
 {% block js %}
@@ -21,7 +21,7 @@
         var startCoords = {{ coords(form.start_lat.data, form.start_lng.data) }};
         var finishCoords = {{ coords(form.finish_lat.data, form.finish_lng.data) }};
     </script>
-    <script src="{{ url_for('static', filename='js/journeys_add.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/journeys_add.js') | asset_release_version }}"></script>
     {% with %}
         {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
         {% set key = config.GOOGLE_MAPS_API_KEY %}
