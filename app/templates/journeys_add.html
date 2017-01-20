@@ -25,8 +25,10 @@
     {% with %}
         {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
         {% set key = config.GOOGLE_MAPS_API_KEY %}
+        {% set libraries = "geometry" %}
         {% set callback = "initMap" %}
-        <script async defer src="{{ base_url }}?key={{ key }}&callback={{ callback }}"></script>
+        <script async defer
+                src="{{ base_url }}?key={{ key }}&libraries={{ libraries }}&callback={{ callback }}"></script>
     {% endwith %}
 {% endblock %}
 
@@ -38,7 +40,15 @@
     <form method="post">
         {{ form.hidden_tag() }}
 
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Journey not created.</strong> Please fix any errors below and try again.
+            </div>
+        {% endif %}
+
         {{ field(form.name, "Name: ") }}
+
+        {{ form.distance_meters(id="distance-meters", type="hidden") }}
 
         {{ field_map(form.start_lat, form.start_lng, "Start:", "map-start", "startLat", "startLng") }}
 

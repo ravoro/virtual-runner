@@ -29,7 +29,7 @@
 
 <div class="flash-messages container">
     {% for message in get_flashed_messages() %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
+        <div class="alert alert-info" role="alert">{{ message }}</div>
     {% endfor %}
 </div>
 
@@ -37,7 +37,7 @@
     {% if content_without_container %}
         {{ content }}
     {% else %}
-        <div class="container">{{ content }}</div>
+        <div id="content" class="container">{{ content }}</div>
     {% endif %}
 {% endwith %}
 

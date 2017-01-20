@@ -41,6 +41,27 @@ function initMap() {
             marker = drawMarker(map, coords);
             document.getElementById(latID).value = coords.lat();
             document.getElementById(lngID).value = coords.lng();
+            calculateDistance();
         });
+    }
+
+    function calculateDistance() {
+        function NanAsNull(val) {
+            return isNaN(val) ? null : val;
+        }
+
+        var startLat = NanAsNull(parseFloat(document.getElementById("startLat").value));
+        var startLng = NanAsNull(parseFloat(document.getElementById("startLng").value));
+        var finishLat = NanAsNull(parseFloat(document.getElementById("finishLat").value));
+        var finishLng = NanAsNull(parseFloat(document.getElementById("finishLng").value));
+
+        var totalDistance = null;
+        if (startLat && startLng && finishLat && finishLng) {
+            var startCoords = new google.maps.LatLng({lat: startLat, lng: startLng});
+            var finishCoords = new google.maps.LatLng({lat: finishLat, lng: finishLng});
+            totalDistance = google.maps.geometry.spherical.computeDistanceBetween(startCoords, finishCoords);
+            totalDistance = totalDistance.toFixed(0);
+        }
+        document.getElementById("distance-meters").value = totalDistance;
     }
 }

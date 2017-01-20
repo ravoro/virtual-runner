@@ -23,6 +23,10 @@ body {
     text-align: right;
 }
 
+#content {
+    padding-top: 20px;
+}
+
 #page-journeys-add-stage form {
     width: 300px;
 }

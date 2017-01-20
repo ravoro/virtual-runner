@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, NumberRange
 
 class JourneysAddForm(FlaskForm):
     name = StringField(validators=[DataRequired()])
+    distance_meters = IntegerField(validators=[NumberRange(min=100)])
     start_lat = DecimalField(validators=[NumberRange(-90, 90)])
     start_lng = DecimalField(validators=[NumberRange(-180, 180)])
     finish_lat = DecimalField(validators=[NumberRange(-90, 90)])
@@ -12,4 +13,4 @@ class JourneysAddForm(FlaskForm):
 
 
 class JourneysAddStageForm(FlaskForm):
-    distance = IntegerField(validators=[NumberRange(min=100)])
+    distance_meters = IntegerField(validators=[NumberRange(min=100)])

@@ -16,8 +16,8 @@
     <script>
         var startCoords = {lat: {{ journey.start_lat }}, lng: {{ journey.start_lng }}};
         var finishCoords = {lat: {{ journey.finish_lat }}, lng: {{ journey.finish_lng }}};
-        var stages = {{ journey.stages_to_distances|default([]) }};
-        var newDistance = 0;
+        var stagesDistance = {{ journey.completed_distance }};
+        var totalDistance = {{ journey.distance_meters }};
     </script>
     <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
     {% with %}

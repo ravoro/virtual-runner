@@ -15,7 +15,13 @@
     <form method="post">
         {{ form.hidden_tag() }}
 
-        {{ field(form.distance, label=" ", placeholder="Distance in meters", addon="meters") }}
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Run not added.</strong> Please fix any errors below and try again.
+            </div>
+        {% endif %}
+
+        {{ field(form.distance_meters, label=" ", placeholder="Distance in meters", addon="meters") }}
 
         <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
     </form>

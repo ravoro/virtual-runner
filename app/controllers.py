@@ -20,19 +20,23 @@ def journeys():
 @app.route('/journeys/add', methods=['GET', 'POST'])
 def journeys_add():
     form = JourneysAddForm()
-    if form.validate_on_submit():
-        journey = Journey(
-            name=str(form.name.data),
-            start_lat=float(form.start_lat.data),
-            start_lng=float(form.start_lng.data),
-            finish_lat=float(form.finish_lat.data),
-            finish_lng=float(form.finish_lng.data)
-        )
-        db.session.add(journey)
-        db.session.commit()
+    if form.is_submitted():
+        if form.validate():
+            journey = Journey(
+                name=str(form.name.data),
+                distance_meters=int(form.distance_meters.data),
+                start_lat=float(form.start_lat.data),
+                start_lng=float(form.start_lng.data),
+                finish_lat=float(form.finish_lat.data),
+                finish_lng=float(form.finish_lng.data)
+            )
+            db.session.add(journey)
+            db.session.commit()
 
-        flash('Successfully created new journey.')
-        return redirect(url_for('journey', jid=journey.id))
+            flash('Successfully created new journey.')
+            return redirect(url_for('journey', jid=journey.id))
+        else:
+            return render_template('journeys_add.html', form=form), 400
     return render_template('journeys_add.html', form=form)
 
 
@@ -45,15 +49,30 @@ def journey(jid):
 @app.route('/journeys/<int:jid>/stages/add', methods=['GET', 'POST'])
 def journeys_add_stage(jid):
     journey = Journey.query.get(jid)
-    form = JourneysAddStageForm()
-    if form.validate_on_submit():
-        stage = Stage(
-            distance=int(form.distance.data),
-            journey=journey
-        )
-        db.session.add(stage)
-        db.session.commit()
 
-        flash('Successfully added new stage.')
+    if journey.is_completed:
+        flash('The journey has been completed.')
         return redirect(url_for('journey', jid=journey.id))
+
+    form = JourneysAddStageForm()
+    if form.is_submitted():
+        if form.validate():
+            # add stage to db
+            stage = Stage(
+                distance_meters=int(form.distance_meters.data),
+                journey=journey
+            )
+            db.session.add(stage)
+            db.session.commit()
+
+            # determine if the journey has been completed
+            if journey.is_completed:
+                flash('Congratulations! You\'ve completed the journey. You can now make me burritos...')
+                return redirect(url_for('journey', jid=journey.id))
+
+            # confirm added stage
+            flash('Successfully added new run.')
+            return redirect(url_for('journey', jid=journey.id))
+        else:
+            return render_template('journeys_add_stage.html', journey=journey, form=form), 400
     return render_template('journeys_add_stage.html', journey=journey, form=form)
