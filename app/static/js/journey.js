@@ -63,7 +63,7 @@ function initMap() {
     new google.maps.InfoWindow({
         content: "<dl>" +
         "<dt><em>Completion:</em></dt><dd>" + (fractionOfTotalCompleted * 100).toFixed(2) + " %</dd>" +
-        "<dt><em>Distance:</em></dt><dd>" + metersToKm(stagesDistance) + " / " + metersToKm(totalDistance) + " km</dd>" +
+        "<dt><em>Distance:</em></dt><dd>" + metersToKm(stagesDistance) + " / " + metersToKm(totalDistance) + " km (" + metersToKm(totalDistance - stagesDistance) + "km remaining)</dd>" +
         ((stagesDistance > totalDistance) ? "<dt><em>Note:</em></dt><dd><em>You've run an additional " + metersToKm(stagesDistance - totalDistance) + " km</em></dd>" : "") +
         "</dl>"
     }).open(map, currentMarker);
