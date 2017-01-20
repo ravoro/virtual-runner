@@ -12,7 +12,7 @@ class BaseConfig(object):
 
 
 class ProdConfig(BaseConfig):
-    RELEASE_VERSION = 20170119
+    RELEASE_VERSION = 20170119.2
 
 
 class DevConfig(BaseConfig):

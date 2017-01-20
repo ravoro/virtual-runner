@@ -8,10 +8,15 @@ function initMap() {
         center: startCoords,
         zoom: 3
     });
+    // zoom map to contain all coords
     var coords = new google.maps.LatLngBounds();
     coords.extend(startCoords);
     coords.extend(finishCoords);
     map.fitBounds(coords);
+    // zoom out map to give spacing between borders and coords
+    google.maps.event.addListenerOnce(map, 'bounds_changed', function () {
+        map.setZoom(map.getZoom() - 1);
+    });
 
 
     // create start/finish markers
