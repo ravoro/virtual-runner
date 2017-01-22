@@ -67,7 +67,16 @@ def journeys_add_stage(jid):
 
             # determine if the journey has been completed
             if journey.is_completed:
-                flash('Congratulations! You\'ve completed the journey. You can now make me burritos...')
+                message = """
+                    <strong>Congratulations!</strong>
+                    You\'ve completed the journey. You can now make me burritos...
+                    <br/><br/>
+                    <iframe height="250px"
+                            width="500px"
+                            src="https://www.youtube.com/embed/3GwjfUFyY6M?autoplay=1&showinfo=0&controls=0&modestbranding=1"
+                            frameborder="0"
+                            allowfullscreen></iframe>"""
+                flash(message, 'html')
                 return redirect(url_for('journey', jid=journey.id))
 
             # confirm added stage

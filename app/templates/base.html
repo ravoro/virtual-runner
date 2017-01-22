@@ -28,8 +28,15 @@
 </nav>
 
 <div class="flash-messages container">
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-info" role="alert">{{ message }}</div>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-info" role="alert">
+            {% if category == 'html' %}
+                {{ message | safe }}
+            {% else %}
+                {{ message }}
+            {% endif %}
+
+        </div>
     {% endfor %}
 </div>
 
