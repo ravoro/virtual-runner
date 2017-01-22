@@ -17,6 +17,8 @@ class ProdConfig(BaseConfig):
 
 class DevConfig(BaseConfig):
     DEBUG = True
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+    DEBUG_TB_PROFILER_ENABLED = True
 
 
 class TestConfig(BaseConfig):
