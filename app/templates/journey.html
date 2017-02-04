@@ -31,11 +31,11 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li><a href="{{ url_for('journeys') }}">Journeys</a></li>
+    <li><a href="{{ url_for('controllers.journeys') }}">Journeys</a></li>
 {% endblock %}
 
 {% block page_actions %}
-    <a class="btn btn-primary" href="{{ url_for('journeys_add_stage', jid=journey.id) }}">
+    <a class="btn btn-primary" href="{{ url_for('controllers.journeys_add_stage', jid=journey.id) }}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         <span>Record a new run</span>
     </a>

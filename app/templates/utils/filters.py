@@ -1,9 +1,11 @@
-from app import app
+from flask import Blueprint, current_app
+
+bp = Blueprint("template_filters", __name__)
 
 
-@app.template_filter()
+@bp.app_template_filter()
 def asset_release_version(url):
-    version = app.config['RELEASE_VERSION']
+    version = current_app.config['RELEASE_VERSION']
     if version:
         url = "{}?v={}".format(url, version)
     return url

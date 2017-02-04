@@ -7,8 +7,8 @@
 {% block body_id %}page-journeys-add-stage{% endblock %}
 
 {% block breadcrumbs %}
-    <li><a href="{{ url_for('journeys') }}">Journeys</a></li>
-    <li><a href="{{ url_for('journey', jid=journey.id) }}">{{ journey.name }}</a></li>
+    <li><a href="{{ url_for('controllers.journeys') }}">Journeys</a></li>
+    <li><a href="{{ url_for('controllers.journey', jid=journey.id) }}">{{ journey.name }}</a></li>
 {% endblock %}
 
 {% block page_content %}

@@ -1,8 +1,9 @@
-from app import app
+from app import create_app
 from flask_debugtoolbar import DebugToolbarExtension
 
-app.config.from_object("config.DevConfig")
+app = create_app("config.DevConfig")
 
-toolbar = DebugToolbarExtension(app)
+# initialize debugtoolbar
+DebugToolbarExtension(app)
 
 app.run()

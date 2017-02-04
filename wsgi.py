@@ -8,9 +8,9 @@ activate_this = os.path.join(BASE_DIR, 'venv', 'bin', 'activate_this.py')
 with open(activate_this) as file_:
     exec(file_.read(), dict(__file__=activate_this))
 
-# get application object
+# add application location to system path
 sys.path.insert(0, BASE_DIR)
-from app import app as application
+from app import create_app
 
-# apply prod config
-application.config.from_object("config.ProdConfig")
+# create application
+application = create_app("config.ProdConfig")

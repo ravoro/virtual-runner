@@ -5,7 +5,7 @@
 {% block body_id %}page-journeys{% endblock %}
 
 {% block page_actions %}
-    <a class="btn btn-primary" href="{{ url_for("journeys_add") }}">
+    <a class="btn btn-primary" href="{{ url_for("controllers.journeys_add") }}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         <span>Create a new journey</span>
     </a>
@@ -22,7 +22,7 @@
             <tbody>
             {% for journey in journeys %}
                 <tr>
-                    <td><a href="{{ url_for("journey", jid=journey.id) }}">{{ journey.name }}</a></td>
+                    <td><a href="{{ url_for("controllers.journey", jid=journey.id) }}">{{ journey.name }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>
