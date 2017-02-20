@@ -8,6 +8,7 @@ class BaseConfig(object):
     SECRET_KEY = 'mr|6I0fWE~!)yd]FwWKO7$j`.>D}Z,7OLOOlzV/xme<&S/f+xGDa|.Z=</Z2A[P|'
     GOOGLE_MAPS_API_KEY = 'AIzaSyCWMRABwAqpwvWXw275HljKmIRMOvJ66Cg'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'journeys.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     RELEASE_VERSION = None
 
 
