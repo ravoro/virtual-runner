@@ -15,6 +15,7 @@ class Journey(db.Model):
     start_lng = db.Column(db.Float)
     finish_lat = db.Column(db.Float)
     finish_lng = db.Column(db.Float)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now)
     stages = db.relationship('Stage', backref='journey')
 
     @property

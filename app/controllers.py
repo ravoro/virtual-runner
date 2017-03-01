@@ -6,6 +6,7 @@ from .models import Journey, Stage, db
 
 bp = Blueprint('controllers', __name__)
 
+
 @bp.route('/')
 def home():
     return redirect(url_for('controllers.journeys'))
