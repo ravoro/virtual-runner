@@ -17,12 +17,22 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for journey in journeys %}
-                <tr>
+                <tr class="{% if journey.is_completed %}active{% endif %}">
                     <td><a href="{{ url_for("controllers.journey", jid=journey.id) }}">{{ journey.name }}</a></td>
+                    <td>
+                        {% if journey.is_completed %}
+                            <span class="label label-success">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                <span>Completed!</span>
+                            </span>
+                        {% endif %}
+
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
