@@ -14,7 +14,7 @@ def home():
 
 @bp.route('/journeys')
 def journeys():
-    journeys = Journey.query.all()
+    journeys = Journey.all_ordered()
     return render_template('journeys.html', journeys=journeys)
 
 

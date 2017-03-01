@@ -26,6 +26,12 @@ class Journey(db.Model):
     def is_completed(self):
         return self.completed_distance >= self.distance_meters
 
+    @staticmethod
+    def all_ordered():
+        return Journey.query \
+            .order_by(Journey.date_created.desc(), Journey.id.desc()) \
+            .all()
+
     def __repr__(self):
         return '<Journey id={}>'.format(self.id)
 
