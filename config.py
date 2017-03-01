@@ -13,13 +13,15 @@ class BaseConfig(object):
 
 
 class ProdConfig(BaseConfig):
-    RELEASE_VERSION = 20170121
+    RELEASE_VERSION = 20170301
 
 
 class DevConfig(BaseConfig):
     DEBUG = True
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
-    DEBUG_TB_PROFILER_ENABLED = True
+    # DEBUG_TB_ENABLED = True
+    # DEBUG_TB_INTERCEPT_REDIRECTS = False
+    # DEBUG_TB_PROFILER_ENABLED = False
+    # TEMPLATES_AUTO_RELOAD = True
 
 
 class TestConfig(BaseConfig):

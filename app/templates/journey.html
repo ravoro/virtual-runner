@@ -35,6 +35,10 @@
 {% endblock %}
 
 {% block page_actions %}
+    <a class="btn btn-primary" href="{{ url_for('controllers.journey_details', jid=journey.id) }}">
+        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+        <span>View details</span>
+    </a>
     <a class="btn btn-primary" href="{{ url_for('controllers.journeys_add_stage', jid=journey.id) }}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         <span>Record a new run</span>

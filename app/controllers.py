@@ -46,6 +46,13 @@ def journey(jid):
     return render_template('journey.html', journey=journey)
 
 
+@bp.route('/journeys/<int:jid>/details')
+def journey_details(jid):
+    journey = Journey.query.get(jid)
+    stages = Stage.all_ordered(jid)
+    return render_template('journey_details.html', journey=journey, stages=stages)
+
+
 @bp.route('/journeys/<int:jid>/stages/add', methods=['GET', 'POST'])
 def journeys_add_stage(jid):
     journey = Journey.query.get(jid)

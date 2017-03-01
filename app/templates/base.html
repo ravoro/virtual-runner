@@ -12,13 +12,13 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-7">
                 <ol class="breadcrumb">
                     {% block breadcrumbs %}{% endblock %}
-                    <li class="active">{{ self.page_title() }}</li>
+                    <li class="active">{% block page_header_title %}{{ self.page_title() }}{% endblock %}</li>
                 </ol>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-5">
                 <div class="page-actions">
                     {% block page_actions %}{% endblock %}
                 </div>

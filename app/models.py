@@ -1,6 +1,10 @@
+import datetime
+
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 class Journey(db.Model):
@@ -28,7 +32,17 @@ class Journey(db.Model):
 class Stage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     distance_meters = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now)
     journey_id = db.Column(db.Integer, db.ForeignKey('journey.id'))
+
+    @staticmethod
+    def all_ordered(jid):
+        return db.session \
+            .query(Stage) \
+            .join(Journey.stages) \
+            .filter_by(journey_id=jid) \
+            .order_by(Stage.id.desc(), Stage.date_created.desc()) \
+            .all()
 
     def __repr__(self):
         return '<Stage id={}>'.format(self.id)
