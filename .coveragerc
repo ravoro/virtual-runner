@@ -1,0 +1,10 @@
+[run]
+branch = True
+data_file = tmp/.coverage
+source = app/
+
+[report]
+precision = 2
+
+[html]
+directory = tmp/htmlcov
