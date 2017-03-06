@@ -26,12 +26,6 @@ class Journey(db.Model):
     def is_completed(self):
         return self.completed_distance >= self.distance_meters
 
-    @staticmethod
-    def all_ordered():
-        return Journey.query \
-            .order_by(Journey.date_created.desc(), Journey.id.desc()) \
-            .all()
-
     def __repr__(self):
         return '<Journey id={}>'.format(self.id)
 
@@ -41,15 +35,6 @@ class Stage(db.Model):
     distance_meters = db.Column(db.Integer)
     date_created = db.Column(db.DateTime, default=datetime.datetime.now)
     journey_id = db.Column(db.Integer, db.ForeignKey('journey.id'))
-
-    @staticmethod
-    def all_ordered(jid):
-        return db.session \
-            .query(Stage) \
-            .join(Journey.stages) \
-            .filter_by(journey_id=jid) \
-            .order_by(Stage.id.desc(), Stage.date_created.desc()) \
-            .all()
 
     def __repr__(self):
         return '<Stage id={}>'.format(self.id)

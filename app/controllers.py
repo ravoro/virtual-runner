@@ -2,7 +2,8 @@ from flask import flash, Blueprint
 from flask import url_for, redirect, render_template
 
 from .forms import JourneysAddForm, JourneysAddStageForm
-from .models import Journey, Stage, db
+from .models import Journey, Stage
+from .repositories import JourneyRepo, StageRepo
 
 bp = Blueprint('controllers', __name__)
 
@@ -14,7 +15,7 @@ def home():
 
 @bp.route('/journeys')
 def journeys():
-    journeys = Journey.all_ordered()
+    journeys = JourneyRepo.all_ordered()
     return render_template('journeys.html', journeys=journeys)
 
 
@@ -23,17 +24,14 @@ def journeys_add():
     form = JourneysAddForm()
     if form.is_submitted():
         if form.validate():
-            journey = Journey(
+            journey = JourneyRepo.create(Journey(
                 name=str(form.name.data),
                 distance_meters=int(form.distance_meters.data),
                 start_lat=float(form.start_lat.data),
                 start_lng=float(form.start_lng.data),
                 finish_lat=float(form.finish_lat.data),
-                finish_lng=float(form.finish_lng.data)
-            )
-            db.session.add(journey)
-            db.session.commit()
-
+                finish_lng=float(form.finish_lng.data),
+            ))
             flash('Successfully created new journey.')
             return redirect(url_for('controllers.journey', jid=journey.id))
         else:
@@ -43,20 +41,20 @@ def journeys_add():
 
 @bp.route('/journeys/<int:jid>')
 def journey(jid):
-    journey = Journey.query.get(jid)
+    journey = JourneyRepo.get(jid)
     return render_template('journey.html', journey=journey)
 
 
 @bp.route('/journeys/<int:jid>/details')
 def journey_details(jid):
-    journey = Journey.query.get(jid)
-    stages = Stage.all_ordered(jid)
+    journey = JourneyRepo.get(jid)
+    stages = StageRepo.all_ordered(jid)
     return render_template('journey_details.html', journey=journey, stages=stages)
 
 
 @bp.route('/journeys/<int:jid>/stages/add', methods=['GET', 'POST'])
 def journeys_add_stage(jid):
-    journey = Journey.query.get(jid)
+    journey = JourneyRepo.get(jid)
 
     if journey.is_completed:
         flash('The journey has been completed.')
@@ -66,12 +64,10 @@ def journeys_add_stage(jid):
     if form.is_submitted():
         if form.validate():
             # add stage to db
-            stage = Stage(
+            StageRepo.create(Stage(
                 distance_meters=int(form.distance_meters.data),
                 journey=journey
-            )
-            db.session.add(stage)
-            db.session.commit()
+            ))
 
             # determine if the journey has been completed
             if journey.is_completed:
