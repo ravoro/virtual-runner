@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from app.models import db, Journey, Stage
 
@@ -17,7 +17,7 @@ class JourneyRepo:
         return journey
 
     @staticmethod
-    def get(id: int) -> Journey:
+    def get(id: int) -> Optional[Journey]:
         return Journey.query.get(id)
 
 
@@ -32,7 +32,7 @@ class StageRepo:
             .all()
 
     @staticmethod
-    def create(stage: Stage) -> Stage:
+    def create(stage: Stage) -> Optional[Stage]:
         db.session.add(stage)
         db.session.commit()
         return stage

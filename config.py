@@ -1,7 +1,7 @@
 import os
 
 
-class BaseConfig(object):
+class ProdConfig:
     BASE_DIR = os.path.dirname(__file__)
     DEBUG = False
     TESTING = False
@@ -9,20 +9,19 @@ class BaseConfig(object):
     GOOGLE_MAPS_API_KEY = 'AIzaSyCWMRABwAqpwvWXw275HljKmIRMOvJ66Cg'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'journeys.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    RELEASE_VERSION = None
+    RELEASE_VERSION = 20170306
 
 
-class ProdConfig(BaseConfig):
-    RELEASE_VERSION = 20170301.2
-
-
-class DevConfig(BaseConfig):
+class DevConfig(ProdConfig):
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(ProdConfig.BASE_DIR, 'tmp', 'local.db')
     # DEBUG_TB_ENABLED = True
     # DEBUG_TB_INTERCEPT_REDIRECTS = False
     # DEBUG_TB_PROFILER_ENABLED = False
     # TEMPLATES_AUTO_RELOAD = True
 
 
-class TestConfig(BaseConfig):
+class TestConfig(DevConfig):
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    WTF_CSRF_ENABLED = False

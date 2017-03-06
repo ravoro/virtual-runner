@@ -1,3 +1,4 @@
+from flask import abort
 from flask import flash, Blueprint
 from flask import url_for, redirect, render_template
 
@@ -36,25 +37,32 @@ def journeys_add():
             return redirect(url_for('controllers.journey', jid=journey.id))
         else:
             return render_template('journeys_add.html', form=form), 400
-    return render_template('journeys_add.html', form=form)
+    else:
+        return render_template('journeys_add.html', form=form)
 
 
 @bp.route('/journeys/<int:jid>')
 def journey(jid):
     journey = JourneyRepo.get(jid)
+    if not journey:
+        abort(404)
     return render_template('journey.html', journey=journey)
 
 
 @bp.route('/journeys/<int:jid>/details')
 def journey_details(jid):
     journey = JourneyRepo.get(jid)
+    if not journey:
+        abort(404)
     stages = StageRepo.all_ordered(jid)
     return render_template('journey_details.html', journey=journey, stages=stages)
 
 
-@bp.route('/journeys/<int:jid>/stages/add', methods=['GET', 'POST'])
+@bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])
 def journeys_add_stage(jid):
     journey = JourneyRepo.get(jid)
+    if not journey:
+        abort(404)
 
     if journey.is_completed:
         flash('The journey has been completed.')
@@ -63,13 +71,12 @@ def journeys_add_stage(jid):
     form = JourneysAddStageForm()
     if form.is_submitted():
         if form.validate():
-            # add stage to db
             StageRepo.create(Stage(
                 distance_meters=int(form.distance_meters.data),
                 journey=journey
             ))
 
-            # determine if the journey has been completed
+            message = 'Successfully added new run.'
             if journey.is_completed:
                 message = """
                     <strong>Congratulations!</strong>
@@ -80,12 +87,9 @@ def journeys_add_stage(jid):
                             src="https://www.youtube.com/embed/oIq5X_Z0gO8?autoplay=1&showinfo=0&controls=0&modestbranding=1"
                             frameborder="0"
                             allowfullscreen></iframe>"""
-                flash(message, 'html')
-                return redirect(url_for('controllers.journey', jid=journey.id))
-
-            # confirm added stage
-            flash('Successfully added new run.')
+            flash(message, 'html')
             return redirect(url_for('controllers.journey', jid=journey.id))
         else:
             return render_template('journeys_add_stage.html', journey=journey, form=form), 400
-    return render_template('journeys_add_stage.html', journey=journey, form=form)
+    else:
+        return render_template('journeys_add_stage.html', journey=journey, form=form)

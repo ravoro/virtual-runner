@@ -23,5 +23,5 @@ def format_date(val):
 @bp.app_template_filter()
 def meters_to_km(val):
     if isinstance(val, int):
-        return '{:.2g}'.format(float(val / 1000))
+        return '{:.2f}'.format(float(val / 1000))
     return val
