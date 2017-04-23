@@ -80,11 +80,11 @@ def journeys_add_stage(jid):
             if journey.is_completed:
                 message = """
                     <strong>Congratulations!</strong>
-                    You\'ve completed the journey. Молодец!
+                    You\'ve completed the journey. Howay!
                     <br/><br/>
                     <iframe height="250px"
                             width="500px"
-                            src="https://www.youtube.com/embed/oIq5X_Z0gO8?autoplay=1&showinfo=0&controls=0&modestbranding=1"
+                            src="https://www.youtube.com/embed/G-5CwNAStbM?autoplay=1&showinfo=0&controls=0&modestbranding=1"
                             frameborder="0"
                             allowfullscreen></iframe>"""
             flash(message, 'html')
