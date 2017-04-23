@@ -46,16 +46,8 @@ def journey(jid):
     journey = JourneyRepo.get(jid)
     if not journey:
         abort(404)
-    return render_template('journey.html', journey=journey)
-
-
-@bp.route('/journeys/<int:jid>/details')
-def journey_details(jid):
-    journey = JourneyRepo.get(jid)
-    if not journey:
-        abort(404)
     stages = StageRepo.all_ordered(jid)
-    return render_template('journey_details.html', journey=journey, stages=stages)
+    return render_template('journey.html', journey=journey, stages=stages)
 
 
 @bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])

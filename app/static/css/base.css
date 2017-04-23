@@ -35,8 +35,3 @@ body {
 #page-journeys td:last-of-type {
     text-align: right;
 }
-
-#page-journey-details th:last-of-type,
-#page-journey-details td:last-of-type {
-    text-align: right;
-}
