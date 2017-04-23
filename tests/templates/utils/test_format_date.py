@@ -5,7 +5,7 @@ from unittest import TestCase
 from app.templates.utils.filters import format_date
 
 
-class TestFormatDate(TestCase):
+class Test(TestCase):
     def test_not_datetime(self):
         """Return the original input argument if the input is not of type `datetime`."""
         invalid_args = ["random string", "06 March 2017", str(datetime.now()), 1234, time.localtime()]

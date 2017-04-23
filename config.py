@@ -9,7 +9,7 @@ class ProdConfig:
     GOOGLE_MAPS_API_KEY = 'AIzaSyCWMRABwAqpwvWXw275HljKmIRMOvJ66Cg'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'journeys.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    RELEASE_VERSION = 20170306
+    RELEASE_VERSION = 20170423
 
 
 class DevConfig(ProdConfig):

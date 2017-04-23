@@ -47,6 +47,12 @@ def journey(jid):
     if not journey:
         abort(404)
     stages = StageRepo.all_ordered(jid)
+
+    completed_fraction = 1
+    if journey.completed_distance < journey.distance_meters:
+        completed_fraction = journey.completed_distance / journey.distance_meters
+    journey.completed_fraction = completed_fraction
+
     return render_template('journey.html', journey=journey, stages=stages)
 
 

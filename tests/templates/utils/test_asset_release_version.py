@@ -5,7 +5,7 @@ from app import create_app
 from app.templates.utils.filters import asset_release_version
 
 
-class TestAssetReleaseVersion(TestCase):
+class Test(TestCase):
     def setUp(self):
         self.app = create_app(config.TestConfig)
 

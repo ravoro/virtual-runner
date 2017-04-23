@@ -3,7 +3,7 @@ from unittest import TestCase
 from app.templates.utils.filters import meters_to_km
 
 
-class TestMetersToKm(TestCase):
+class Test(TestCase):
     def test_not_int(self):
         """Return the original input argument if the input is not of type `int`."""
         invalid_args = ["random string", "123", 123.5]

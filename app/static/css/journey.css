@@ -15,3 +15,7 @@ html, body {
     top: 70px;
     z-index: 1000;
 }
+
+#journey-details-modal dd {
+    margin-bottom: 20px;
+}

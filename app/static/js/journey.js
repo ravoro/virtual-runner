@@ -35,8 +35,7 @@ function initMap() {
 
 
     // determine current marker
-    var fractionOfTotalCompleted = stagesDistance < totalDistance ? stagesDistance / totalDistance : 1;
-    var currentCoords = google.maps.geometry.spherical.interpolate(startCoords, finishCoords, fractionOfTotalCompleted);
+    var currentCoords = google.maps.geometry.spherical.interpolate(startCoords, finishCoords, fractionCompleted);
     var currentMarker = new google.maps.Marker({
         map: map,
         position: currentCoords,
@@ -60,15 +59,8 @@ function initMap() {
 
 
     // info box
+    var infoDetails = $('#journey-distance-details').html();
     new google.maps.InfoWindow({
-        content: "<dl>" +
-        "<dt><em>Completion:</em></dt><dd>" + (fractionOfTotalCompleted * 100).toFixed(2) + " %</dd>" +
-        "<dt><em>Distance:</em></dt><dd>" + metersToKm(stagesDistance) + " / " + metersToKm(totalDistance) + " km (" + metersToKm(totalDistance - stagesDistance) + "km remaining)</dd>" +
-        ((stagesDistance > totalDistance) ? "<dt><em>Note:</em></dt><dd><em>You've run an additional " + metersToKm(stagesDistance - totalDistance) + " km</em></dd>" : "") +
-        "</dl>"
+        content: "<dl>" + infoDetails + "</dl>"
     }).open(map, currentMarker);
-
-    function metersToKm(m) {
-        return (m / 1000).toFixed(2);
-    }
 }
