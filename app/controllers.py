@@ -1,6 +1,5 @@
-from flask import abort
-from flask import flash, Blueprint
-from flask import url_for, redirect, render_template
+from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
+from werkzeug.wrappers import Response
 
 from .forms import JourneysAddForm, JourneysAddStageForm
 from .models import Journey, Stage
@@ -10,18 +9,18 @@ bp = Blueprint('controllers', __name__)
 
 
 @bp.route('/')
-def home():
+def home() -> Response:
     return redirect(url_for('controllers.journeys'))
 
 
 @bp.route('/journeys')
-def journeys():
+def journeys() -> Response:
     journeys = JourneyRepo.all_ordered()
     return render_template('journeys.html', journeys=journeys)
 
 
 @bp.route('/journeys/add', methods=['GET', 'POST'])
-def journeys_add():
+def journeys_add() -> Response:
     form = JourneysAddForm()
     if form.is_submitted():
         if form.validate():
@@ -36,16 +35,16 @@ def journeys_add():
             flash('Successfully created new journey.')
             return redirect(url_for('controllers.journey', jid=journey.id))
         else:
-            return render_template('journeys_add.html', form=form), 400
+            return make_response(render_template('journeys_add.html', form=form), 400)
     else:
         return render_template('journeys_add.html', form=form)
 
 
 @bp.route('/journeys/<int:jid>')
-def journey(jid):
+def journey(jid: int) -> Response:
     journey = JourneyRepo.get(jid)
     if not journey:
-        abort(404)
+        return abort(404)
     stages = StageRepo.all_ordered(jid)
 
     completed_fraction = 1
@@ -57,10 +56,10 @@ def journey(jid):
 
 
 @bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])
-def journeys_add_stage(jid):
+def journeys_add_stage(jid: int) -> Response:
     journey = JourneyRepo.get(jid)
     if not journey:
-        abort(404)
+        return abort(404)
 
     if journey.is_completed:
         flash('The journey has been completed.')
@@ -88,6 +87,6 @@ def journeys_add_stage(jid):
             flash(message, 'html')
             return redirect(url_for('controllers.journey', jid=journey.id))
         else:
-            return render_template('journeys_add_stage.html', journey=journey, form=form), 400
+            return make_response(render_template('journeys_add_stage.html', journey=journey, form=form), 400)
     else:
         return render_template('journeys_add_stage.html', journey=journey, form=form)
