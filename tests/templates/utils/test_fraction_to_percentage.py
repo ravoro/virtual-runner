@@ -17,3 +17,5 @@ class Test(TestCase):
         assert fraction_to_percentage(.49995) == "49.99"
         assert fraction_to_percentage(.49996) == "50.00"
         assert fraction_to_percentage(1) == "100.00"
+        assert fraction_to_percentage(1.23) == "100.00"
+

@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from typing import List, Optional
 
 from app.models import db, Journey, Stage
@@ -36,3 +37,10 @@ class StageRepo:
         db.session.add(stage)
         db.session.commit()
         return stage
+
+    @staticmethod
+    def total_distance() -> int:
+        """Total sum of all stage distances."""
+        return db.session \
+            .query(func.sum(Stage.distance_meters)) \
+            .scalar()

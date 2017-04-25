@@ -16,7 +16,10 @@ def home() -> Response:
 @bp.route('/journeys')
 def journeys() -> Response:
     journeys = JourneyRepo.all_ordered()
-    return render_template('journeys.html', journeys=journeys)
+    stats = {
+        'total_distance': StageRepo.total_distance()
+    }
+    return render_template('journeys.html', journeys=journeys, stats=stats)
 
 
 @bp.route('/journeys/add', methods=['GET', 'POST'])

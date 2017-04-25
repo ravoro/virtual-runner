@@ -30,5 +30,8 @@ def meters_to_km(val):
 @bp.app_template_filter()
 def fraction_to_percentage(val):
     if isinstance(val, (int, float)):
-        return '{:.2f}'.format(float(val * 100))
+        percent = float(val * 100)
+        if percent > 100:
+            percent = 100
+        return '{:.2f}'.format(percent)
     return val

@@ -31,7 +31,20 @@ body {
     width: 300px;
 }
 
-#page-journeys th:last-of-type,
-#page-journeys td:last-of-type {
+#page-journeys #journeys-table td:first-of-type {
+    width: 33%;
+}
+
+#page-journeys #journeys-table .progress {
+    margin: 0;
     text-align: right;
+}
+
+#page-journeys #journeys-table .progress .progress-bar {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#page-journeys #stats-table td:first-of-type {
+    width: 120px;
 }

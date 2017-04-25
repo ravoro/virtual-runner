@@ -13,28 +13,49 @@
 
 {% block page_content %}
     {% if journeys %}
-        <table class="table">
+        <table id="journeys-table" class="table">
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Journeys</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {% for journey in journeys %}
-                <tr class="{% if journey.is_completed %}active{% endif %}">
+                <tr>
                     <td><a href="{{ url_for("controllers.journey", jid=journey.id) }}">{{ journey.name }}</a></td>
                     <td>
-                        {% if journey.is_completed %}
-                            <span class="label label-success">
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                <span>Completed!</span>
-                            </span>
-                        {% endif %}
-
+                        <div class="progress">
+                            {% with fraction_completed = journey.completed_distance / journey.distance_meters %}
+                                <div class="progress-bar {% if fraction_completed >= 1 %}progress-bar-success{% endif %}"
+                                     role="progressbar"
+                                     style="width: {{ fraction_completed|fraction_to_percentage }}%; min-width: 6%;">
+                                    {% if fraction_completed >= 1 %}
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                        <span>Completed!</span>
+                                    {% else %}
+                                        {{ fraction_completed|fraction_to_percentage }}%
+                                    {% endif %}
+                                </div>
+                            {% endwith %}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
+            </tbody>
+        </table>
+        <table id="stats-table" class="table">
+            <thead>
+            <tr>
+                <th>Stats</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Total distance:</td>
+                <td>{{ stats.total_distance|meters_to_km }} km</td>
+            </tr>
             </tbody>
         </table>
     {% else %}

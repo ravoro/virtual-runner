@@ -1,6 +1,6 @@
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
-from app.repositories import JourneyRepo
+from app.repositories import JourneyRepo, StageRepo
 from . import BaseCase
 
 
@@ -13,12 +13,14 @@ class TestJourneys(BaseCase):
             'path': '/journeys'
         }
 
-        self.html_journeys_selector = '#content table tbody tr'
+        self.html_journeys_selector = '#content #journeys-table tbody tr'
 
+    @patch.object(StageRepo, 'total_distance')
     @patch.object(JourneyRepo, 'all_ordered')
-    def test_no_journeys(self, mock_all_ordered):
+    def test_no_journeys(self, mock_all_ordered: Mock, mock_total_distance: Mock):
         """Return 200 status and show text that there are no journeys."""
         mock_all_ordered.return_value = []
+        mock_total_distance.return_value = 0
 
         response = self.make_request()
         html = self.response_html(response)
@@ -28,12 +30,14 @@ class TestJourneys(BaseCase):
         assert len(html_journeys) == 0
         assert "No journeys created." in html.select_one('#content').text
 
+    @patch.object(StageRepo, 'total_distance')
     @patch.object(JourneyRepo, 'all_ordered')
-    def test_list_journeys(self, mock_all_ordered):
+    def test_list_journeys(self, mock_all_ordered: Mock, mock_total_distance: Mock):
         """Return 200 status and show list of journeys."""
         journey1 = self.make_journey(id=1)
         journey2 = self.make_journey(id=2)
         mock_all_ordered.return_value = [journey1, journey2]
+        mock_total_distance.return_value = 0
 
         response = self.make_request()
         html = self.response_html(response)
@@ -41,3 +45,16 @@ class TestJourneys(BaseCase):
 
         assert response.status_code == 200
         assert len(html_journeys) == 2
+
+    @patch.object(StageRepo, 'total_distance')
+    @patch.object(JourneyRepo, 'all_ordered')
+    def test_list_journeys(self, mock_all_ordered: Mock, mock_total_distance: Mock):
+        """Display total distance stats."""
+        mock_distance = 567.89
+        mock_all_ordered.return_value = [self.make_journey()]
+        mock_total_distance.return_value = mock_distance
+
+        response = self.make_request()
+        html = self.response_html(response)
+
+        assert str(mock_distance) in html.select_one('#content').text
