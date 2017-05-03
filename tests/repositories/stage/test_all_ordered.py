@@ -66,49 +66,38 @@ class TestAllOrdered(TestCase):
             stage2_2 = self.create_stage(2, None, journey2.id)
             assert StageRepo.all_ordered(journey1.id) == []
 
-    def test_order_id_desc(self):
+    def test_order_date_desc(self):
         """Return list of stages ordered by date in descending order."""
         with self.app.app_context():
             journey = self.create_journey(1)
             stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
             stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
             stage3 = self.create_stage(3, datetime(2016, 3, 5), journey.id)
-            assert StageRepo.all_ordered(journey.id) == [stage3, stage2, stage1]
+            assert StageRepo.all_ordered(journey.id) == [stage2, stage1, stage3]
 
-    # TODO - re-enable tests to order stages by dates (desc), once the functionality is implemented
+    def test_order_same_date(self):
+        """Return list of stages ordered by id (descending) in cases where date is the same."""
+        with self.app.app_context():
+            journey = self.create_journey(1)
+            stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
+            stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
+            stage3 = self.create_stage(3, datetime(2016, 3, 6), journey.id)
+            assert StageRepo.all_ordered(journey.id) == [stage2, stage3, stage1]
 
-    # def test_order_date_desc(self):
-    #     """Return list of stages ordered by date in descending order."""
-    #     with self.app.app_context():
-    #         journey = self.create_journey(1)
-    #         stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
-    #         stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
-    #         stage3 = self.create_stage(3, datetime(2016, 3, 5), journey.id)
-    #         assert StageRepo.all_ordered(journey.id) == [stage2, stage1, stage3]
-    #
-    # def test_order_same_date(self):
-    #     """Return list of stages ordered by id (descending) in cases where date is the same."""
-    #     with self.app.app_context():
-    #         journey = self.create_journey(1)
-    #         stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
-    #         stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
-    #         stage3 = self.create_stage(3, datetime(2016, 3, 6), journey.id)
-    #         assert StageRepo.all_ordered(journey.id) == [stage2, stage3, stage1]
-    #
-    # def test_order_null_after_date(self):
-    #     """Return list of stages where stages that have a null date are ordered after stages with dates."""
-    #     with self.app.app_context():
-    #         journey = self.create_journey(1)
-    #         stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
-    #         stage2 = self.create_stage(2, None, journey.id)
-    #         stage3 = self.create_stage(3, datetime(2016, 3, 5), journey.id)
-    #         assert StageRepo.all_ordered(journey.id) == [stage1, stage3, stage2]
-    #
-    # def test_order_nulls(self):
-    #     """Return list of stages where stages that have a null date are ordered by id (descending)."""
-    #     with self.app.app_context():
-    #         journey = self.create_journey(1)
-    #         stage1 = self.create_stage(1, None, journey.id)
-    #         stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
-    #         stage3 = self.create_stage(3, None, journey.id)
-    #         assert StageRepo.all_ordered(journey.id) == [stage2, stage3, stage1]
+    def test_order_null_after_date(self):
+        """Return list of stages where stages that have a null date are ordered after stages with dates."""
+        with self.app.app_context():
+            journey = self.create_journey(1)
+            stage1 = self.create_stage(1, datetime(2016, 3, 6), journey.id)
+            stage2 = self.create_stage(2, None, journey.id)
+            stage3 = self.create_stage(3, datetime(2016, 3, 5), journey.id)
+            assert StageRepo.all_ordered(journey.id) == [stage1, stage3, stage2]
+
+    def test_order_nulls(self):
+        """Return list of stages where stages that have a null date are ordered by id (descending)."""
+        with self.app.app_context():
+            journey = self.create_journey(1)
+            stage1 = self.create_stage(1, None, journey.id)
+            stage2 = self.create_stage(2, datetime(2016, 3, 7), journey.id)
+            stage3 = self.create_stage(3, None, journey.id)
+            assert StageRepo.all_ordered(journey.id) == [stage2, stage3, stage1]

@@ -29,7 +29,7 @@ class StageRepo:
             .query(Stage) \
             .join(Journey.stages) \
             .filter_by(journey_id=jid) \
-            .order_by(Stage.id.desc(), Stage.date_created.desc()) \
+            .order_by(Stage.date_created.desc(), Stage.id.desc()) \
             .all()
 
     @staticmethod
