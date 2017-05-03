@@ -1,17 +1,13 @@
 {% from 'utils/fields.html' import field %}
 
-{% extends 'base.html' %}
+{% extends 'journey_base.html' %}
 
-{% block page_title %}Record a new run{% endblock %}
+{% block page_title %}Record a new run - {{ super() }}{% endblock %}
 
-{% block body_id %}page-journeys-add-stage{% endblock %}
-
-{% block breadcrumbs %}
-    <li><a href="{{ url_for('controllers.journeys') }}">Journeys</a></li>
-    <li><a href="{{ url_for('controllers.journey', jid=journey.id) }}">{{ journey.name }}</a></li>
-{% endblock %}
+{% block body_id %}{{ super() }}-add-stage{% endblock %}
 
 {% block page_content %}
+    {{ super() }}
     <form method="post">
         {{ form.hidden_tag() }}
 

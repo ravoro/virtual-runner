@@ -3,7 +3,7 @@ from unittest import TestCase
 from app.models import Journey
 
 
-class TestRepr(TestCase):
+class Test(TestCase):
     def test_correct_repr(self):
         """Return string representing the journey object."""
         journey = Journey(

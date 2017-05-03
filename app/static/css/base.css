@@ -2,24 +2,44 @@ body {
     padding-top: 70px;
 }
 
+html.fullscreen,
+html.fullscreen body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.fullscreen .fullscreen-container {
+    height: 100%;
+}
+
+.fullscreen .flash-messages {
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 80px;
+    z-index: 1000;
+}
+
 .container {
     width: 970px;
 }
 
 .navbar .breadcrumb {
     background: none;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 60px;
     margin: 0;
-    padding: 18px 0;
+    padding: 0 0 0 15px;
 }
 
 .navbar .breadcrumb .active {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .navbar .page-actions {
-    padding: 15px;
+    padding: 15px 15px 15px 0;
     text-align: right;
 }
 
@@ -27,7 +47,11 @@ body {
     padding-top: 20px;
 }
 
-#page-journeys-add-stage form {
+#journey-details-modal dd {
+    margin-bottom: 20px;
+}
+
+#page-journey-add-stage form {
     width: 300px;
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{% if content_without_container %}fullscreen{% endif %}">
 <head>
     <meta charset="utf-8">
     <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
@@ -12,15 +12,17 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="row">
-            <div class="col-xs-7">
+            <div class="col-xs-6">
                 <ol class="breadcrumb">
                     {% block breadcrumbs %}{% endblock %}
                     <li class="active">{% block page_header_title %}{{ self.page_title() }}{% endblock %}</li>
                 </ol>
             </div>
-            <div class="col-xs-5">
+            <div class="col-xs-6">
                 <div class="page-actions">
-                    {% block page_actions %}{% endblock %}
+                    <div class="btn-group btn-group-sm" role="group">
+                        {% block page_actions %}{% endblock %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,7 +37,6 @@
             {% else %}
                 {{ message }}
             {% endif %}
-
         </div>
     {% endfor %}
 </div>

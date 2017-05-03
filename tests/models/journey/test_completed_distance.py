@@ -3,7 +3,7 @@ from unittest import TestCase
 from app.models import Journey, Stage
 
 
-class TestCompletedDistance(TestCase):
+class Test(TestCase):
     def setUp(self):
         self.journey = Journey(
             id=1,

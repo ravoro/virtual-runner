@@ -5,7 +5,7 @@ from app.repositories import JourneyRepo
 from . import BaseCase
 
 
-class TestJourneysAddSubmit(BaseCase):
+class Test(BaseCase):
     def setUp(self):
         super().setUp()
 

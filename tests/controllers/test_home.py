@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from . import BaseCase
 
 
-class TestHome(BaseCase):
+class Test(BaseCase):
     def setUp(self):
         super().setUp()
 

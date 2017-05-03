@@ -36,7 +36,7 @@ def journeys_add() -> Response:
                 finish_lng=float(form.finish_lng.data),
             ))
             flash('Successfully created new journey.')
-            return redirect(url_for('controllers.journey', jid=journey.id))
+            return redirect(url_for('controllers.journey_details', jid=journey.id))
         else:
             return make_response(render_template('journeys_add.html', form=form), 400)
     else:
@@ -44,29 +44,24 @@ def journeys_add() -> Response:
 
 
 @bp.route('/journeys/<int:jid>')
-def journey(jid: int) -> Response:
-    journey = JourneyRepo.get(jid)
-    if not journey:
-        return abort(404)
-    stages = StageRepo.all_ordered(jid)
+def journey_details(jid: int) -> Response:
+    journey = _get_journey_data(jid)
+    return render_template('journey_details.html', journey=journey)
 
-    completed_fraction = 1
-    if journey.completed_distance < journey.distance_meters:
-        completed_fraction = journey.completed_distance / journey.distance_meters
-    journey.completed_fraction = completed_fraction
 
-    return render_template('journey.html', journey=journey, stages=stages)
+@bp.route('/journeys/<int:jid>/panorama')
+def journey_panorama(jid: int) -> Response:
+    journey = _get_journey_data(jid)
+    return render_template('journey_panorama.html', journey=journey)
 
 
 @bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])
 def journeys_add_stage(jid: int) -> Response:
-    journey = JourneyRepo.get(jid)
-    if not journey:
-        return abort(404)
+    journey = _get_journey_data(jid)
 
     if journey.is_completed:
         flash('The journey has been completed.')
-        return redirect(url_for('controllers.journey', jid=journey.id))
+        return redirect(url_for('controllers.journey_details', jid=journey.id))
 
     form = JourneysAddStageForm()
     if form.is_submitted():
@@ -88,8 +83,18 @@ def journeys_add_stage(jid: int) -> Response:
                             frameborder="0"
                             allowfullscreen></iframe>"""
             flash(message, 'html')
-            return redirect(url_for('controllers.journey', jid=journey.id))
+            return redirect(url_for('controllers.journey_panorama', jid=journey.id))
         else:
-            return make_response(render_template('journeys_add_stage.html', journey=journey, form=form), 400)
+            return make_response(render_template('journey_add_stage.html', journey=journey, form=form), 400)
     else:
-        return render_template('journeys_add_stage.html', journey=journey, form=form)
+        return render_template('journey_add_stage.html', journey=journey, form=form)
+
+
+def _get_journey_data(jid: int) -> Journey:
+    """Fetch journey record including any relevant additional details. Raise 404 exception if journey not found."""
+    journey = JourneyRepo.get(jid)
+    if not journey:
+        return abort(404)
+    stages = StageRepo.all_ordered(jid)
+    journey.stages_ordered = stages
+    return journey

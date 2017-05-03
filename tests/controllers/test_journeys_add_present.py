@@ -1,7 +1,7 @@
 from . import BaseCase
 
 
-class TestJourneysAddPresent(BaseCase):
+class Test(BaseCase):
     def setUp(self):
         super().setUp()
 

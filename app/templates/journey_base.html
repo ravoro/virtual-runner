@@ -1,49 +1,37 @@
 {% extends "base.html" %}
 
-{% set content_without_container = True %}
-
 {% block page_title %}{{ journey.name }}{% endblock %}
 
+{% block page_header_title %}{{ journey.name }}{% endblock %}
+
 {% block body_id %}page-journey{% endblock %}
-
-{% block css %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/journey.css') | asset_release_version }}"/>
-{% endblock %}
-
-{% block js %}
-    {{ super() }}
-    <script>
-        var startCoords = {lat: {{ journey.start_lat }}, lng: {{ journey.start_lng }}};
-        var finishCoords = {lat: {{ journey.finish_lat }}, lng: {{ journey.finish_lng }}};
-        var stagesDistance = {{ journey.completed_distance }};
-        var totalDistance = {{ journey.distance_meters }};
-        var fractionCompleted = {{ journey.completed_fraction }};
-    </script>
-    <script src="{{ url_for('static', filename='js/journey.js') | asset_release_version }}"></script>
-    {% with %}
-        {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
-        {% set key = config.GOOGLE_MAPS_API_KEY %}
-        {% set libraries = "geometry" %}
-        {% set callback = "initMap" %}
-        <script async defer
-                src="{{ base_url }}?key={{ key }}&libraries={{ libraries }}&callback={{ callback }}"></script>
-    {% endwith %}
-{% endblock %}
 
 {% block breadcrumbs %}
     <li><a href="{{ url_for('controllers.journeys') }}">Journeys</a></li>
 {% endblock %}
 
 {% block page_actions %}
-    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#journey-details-modal">
-        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-        <span>View details</span>
-    </button>
-    <a class="btn btn-primary" href="{{ url_for('controllers.journeys_add_stage', jid=journey.id) }}">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        <span>Record a new run</span>
+    <a class="btn btn-default {% if 'controllers.journey_details' == request.endpoint %}active{% endif %}"
+       href="{{ url_for('controllers.journey_details', jid=journey.id) }}">
+        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+        <span>Map</span>
     </a>
+    <a class="btn btn-default {% if 'controllers.journey_panorama' == request.endpoint %}active{% endif %}"
+       href="{{ url_for('controllers.journey_panorama', jid=journey.id) }}">
+        <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+        <span>Panorama</span>
+    </a>
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#journey-details-modal">
+        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+        <span>Details</span>
+    </button>
+    {% if not journey.is_completed %}
+        <a class="btn btn-default {% if 'controllers.journeys_add_stage' == request.endpoint %}active{% endif %}"
+           href="{{ url_for('controllers.journeys_add_stage', jid=journey.id) }}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <span>Record a new run</span>
+        </a>
+    {% endif %}
 {% endblock %}
 
 {% block page_content %}
@@ -85,10 +73,10 @@
 
                         <dt>Runs:</dt>
                         <dd>
-                            {% if stages %}
+                            {% if journey.stages_ordered %}
                                 <table class="table table-striped table-condensed">
                                     <tbody>
-                                    {% for stage in stages %}
+                                    {% for stage in journey.stages_ordered %}
                                         <tr>
                                             <td>{{ stage.date_created|format_date|default('----', true) }}</td>
                                             <td>{{ stage.distance_meters|meters_to_km }} km</td>
@@ -105,6 +93,4 @@
             </div>
         </div>
     </div>
-
-    <div id="map"></div>
 {% endblock %}

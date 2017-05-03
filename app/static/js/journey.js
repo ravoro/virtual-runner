@@ -1,10 +1,11 @@
 function initMap() {
     startCoords = new google.maps.LatLng(startCoords);
     finishCoords = new google.maps.LatLng(finishCoords);
+    var elementId = 'journey-map';
 
 
     // create map
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(document.getElementById(elementId), {
         center: startCoords,
         zoom: 3
     });

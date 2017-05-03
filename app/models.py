@@ -26,6 +26,12 @@ class Journey(db.Model):
     def is_completed(self) -> bool:
         return self.completed_distance >= self.distance_meters
 
+    @property
+    def completed_fraction(self) -> float:
+        if self.is_completed:
+            return 1
+        return self.completed_distance / self.distance_meters
+
     def __repr__(self) -> str:
         return '<Journey id={}>'.format(self.id)
 

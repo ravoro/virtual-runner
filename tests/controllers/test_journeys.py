@@ -4,7 +4,7 @@ from app.repositories import JourneyRepo, StageRepo
 from . import BaseCase
 
 
-class TestJourneys(BaseCase):
+class Test(BaseCase):
     def setUp(self):
         super().setUp()
 
