@@ -83,7 +83,7 @@ class Test(BaseCase):
     @patch.object(StageRepo, 'all_ordered')
     @patch.object(JourneyRepo, 'get')
     def test_final_stage_message(self, mock_get: Mock, mock_all_ordered: Mock, mock_create: Mock):
-        """Display custom flash message when submitting the final stage."""
+        """Display an html flash message when submitting the final stage."""
         journey = self.make_journey()
         mock_get.return_value = journey
         mock_all_ordered.return_value = None
@@ -93,5 +93,4 @@ class Test(BaseCase):
         response = self.make_request(data=final_stage)
 
         with self.test_client.session_transaction() as session:
-            assert 'You\'ve completed the journey' in session['_flashes'][0][1]
-            assert '</iframe>' in session['_flashes'][0][1]
+            assert 'You&#39;ve completed the journey' in session['_flashes'][0][1]

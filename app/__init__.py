@@ -1,3 +1,4 @@
+import jinja2
 import os
 import sys
 
@@ -17,6 +18,13 @@ def create_app(config_obj):
     from .models import db, migrate
     db.init_app(app)
     migrate.init_app(app, db)
+
+    # prioritize a custom template directory (if one is configured)
+    if app.config.get('CUSTOM_TEMPLATES_DIR'):
+        app.jinja_loader = jinja2.ChoiceLoader([
+            jinja2.FileSystemLoader(app.config['CUSTOM_TEMPLATES_DIR']),
+            app.jinja_loader
+        ])
 
     # initialize blueprints
     from .controllers import bp as controllers

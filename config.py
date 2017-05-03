@@ -9,12 +9,14 @@ class ProdConfig:
     GOOGLE_MAPS_API_KEY = 'AIzaSyCWMRABwAqpwvWXw275HljKmIRMOvJ66Cg'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'journeys.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CUSTOM_TEMPLATES_DIR = os.path.join(BASE_DIR, 'app_data', 'templates')
     RELEASE_VERSION = 20170503
 
 
 class DevConfig(ProdConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(ProdConfig.BASE_DIR, 'tmp', 'local.db')
+    CUSTOM_TEMPLATES_DIR = None
     # DEBUG_TB_ENABLED = True
     # DEBUG_TB_INTERCEPT_REDIRECTS = False
     # DEBUG_TB_PROFILER_ENABLED = False

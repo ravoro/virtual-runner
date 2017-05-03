@@ -71,18 +71,10 @@ def journeys_add_stage(jid: int) -> Response:
                 journey=journey
             ))
 
-            message = 'Successfully added new run.'
             if journey.is_completed:
-                message = """
-                    <strong>Congratulations!</strong>
-                    You\'ve completed the journey. Howay!
-                    <br/><br/>
-                    <iframe height="250px"
-                            width="500px"
-                            src="https://www.youtube.com/embed/G-5CwNAStbM?autoplay=1&showinfo=0&controls=0&modestbranding=1"
-                            frameborder="0"
-                            allowfullscreen></iframe>"""
-            flash(message, 'html')
+                flash(render_template('flash_messages/journey_add_stage_complete.html'), 'html')
+            else:
+                flash('Successfully added new run.')
             return redirect(url_for('controllers.journey_panorama', jid=journey.id))
         else:
             return make_response(render_template('journey_add_stage.html', journey=journey, form=form), 400)
