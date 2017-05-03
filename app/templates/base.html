@@ -31,7 +31,8 @@
 
 <div class="flash-messages container">
     {% for category, message in get_flashed_messages(with_categories=true) %}
-        <div class="alert alert-info" role="alert">
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
             {% if category == 'html' %}
                 {{ message | safe }}
             {% else %}
