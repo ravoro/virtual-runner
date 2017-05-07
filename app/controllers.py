@@ -1,9 +1,9 @@
 from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
 from werkzeug.wrappers import Response
 
-from .forms import JourneysAddForm, JourneysAddStageForm
-from .models import Journey, Stage
-from .repositories import JourneyRepo, StageRepo
+from .forms import JourneysAddForm, JourneysAddStageForm, UserRegisterForm
+from .models import Journey, Stage, User
+from .repositories import JourneyRepo, StageRepo, UserRepo
 
 bp = Blueprint('controllers', __name__)
 
@@ -90,3 +90,26 @@ def _get_journey_data(jid: int) -> Journey:
     stages = StageRepo.all_ordered(jid)
     journey.stages_ordered = stages
     return journey
+
+
+@bp.route('/register', methods=['GET', 'POST'])
+def user_register() -> Response:
+    # TODO - disallow authed users
+    form = UserRegisterForm()
+    if not form.is_submitted():
+        return render_template('user_register.html', form=form)
+    if not form.validate():
+        return make_response(render_template('user_register.html', form=form), 400)
+
+    UserRepo.add(User(
+        email=form.email.data,
+        password=form.password.data
+    ))
+
+    flash('Successfully registered.')
+    return redirect(url_for('controllers.user_login'))
+
+
+@bp.route('/login', methods=['GET', 'POST'])
+def user_login() -> Response:
+    pass

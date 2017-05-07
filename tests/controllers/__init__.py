@@ -5,7 +5,7 @@ from flask import Response
 
 import config
 from app import create_app
-from app.models import Journey, Stage
+from app.models import Journey, Stage, User
 
 
 class BaseCase(TestCase):
@@ -41,6 +41,16 @@ class BaseCase(TestCase):
         }
         vals = {**base_vals, **kwargs}
         return Stage(**vals)
+
+    @staticmethod
+    def make_user(**kwargs) -> User:
+        base_vals = {
+            'id': 123,
+            'email': 'test@example.com',
+            'password': 'samplepassword'
+        }
+        vals = {**base_vals, **kwargs}
+        return User(**vals)
 
     @staticmethod
     def response_html(response: Response) -> BeautifulSoup:

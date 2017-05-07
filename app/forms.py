@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, IntegerField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms import DecimalField, IntegerField, PasswordField, StringField
+from wtforms.validators import DataRequired, Email, Length, NumberRange, ValidationError
+
+from .repositories import UserRepo
 
 
 class JourneysAddForm(FlaskForm):
@@ -14,3 +16,13 @@ class JourneysAddForm(FlaskForm):
 
 class JourneysAddStageForm(FlaskForm):
     distance_meters = IntegerField(validators=[NumberRange(min=100)])
+
+
+class UserRegisterForm(FlaskForm):
+    email = StringField(validators=[Email(), Length(max=64)])
+    password = PasswordField(validators=[Length(min=8, max=64)])
+
+    @staticmethod
+    def validate_email(form, field):
+        if UserRepo.get_by_email(field.data) is not None:
+            raise ValidationError('"{}" is already registered. Please choose a different email.'.format(field.data))

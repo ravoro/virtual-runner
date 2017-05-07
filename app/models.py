@@ -2,6 +2,7 @@ import datetime
 
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -44,3 +45,20 @@ class Stage(db.Model):
 
     def __repr__(self) -> str:
         return '<Stage id={}>'.format(self.id)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64), unique=True, nullable=False)
+    _password_hash = db.Column('password_hash', db.String(128), nullable=False)
+
+    @property
+    def password(self):
+        raise AttributeError('attribute \'password\' is not readable')
+
+    @password.setter
+    def password(self, val):
+        self._password_hash = generate_password_hash(val)
+
+    def __repr__(self) -> str:
+        return '<User id={}>'.format(self.id)
