@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from werkzeug.security import check_password_hash
 from wtforms import DecimalField, IntegerField, PasswordField, StringField
 from wtforms.validators import DataRequired, Email, Length, NumberRange, ValidationError
 
@@ -16,6 +17,21 @@ class JourneysAddForm(FlaskForm):
 
 class JourneysAddStageForm(FlaskForm):
     distance_meters = IntegerField(validators=[NumberRange(min=100)])
+
+
+class UserLoginForm(FlaskForm):
+    email_or_username = StringField(validators=[Length(min=2, max=64)])
+    password = PasswordField(validators=[Length(min=8, max=64)])
+
+    def validate(self):
+        return super().validate() and self._validate_credentials()
+
+    def _validate_credentials(self):
+        user = UserRepo.get_by_email_or_username(self.email_or_username.data)
+        if user and check_password_hash(user._password_hash, self.password.data):
+            return True
+        self.email_or_username.errors = self.password.errors = ['Invalid email or password.']
+        return False
 
 
 class UserRegisterForm(FlaskForm):

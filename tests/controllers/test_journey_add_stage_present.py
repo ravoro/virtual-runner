@@ -14,12 +14,18 @@ class Test(BaseCase):
             'path': '/journeys/123/add-run'
         }
 
+    def test_unauthed(self):
+        """Return 302 status and redirect to /login when user is not logged in."""
+        response = self.make_request()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/login'
+
     @patch.object(JourneyRepo, 'get')
     def test_not_found(self, mock_get: Mock):
         """Return 404 status and show error page when no journey matches the given id."""
         mock_get.return_value = None
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
         html = self.response_html(response)
 
         assert response.status_code == 404
@@ -35,7 +41,7 @@ class Test(BaseCase):
         mock_get.return_value = journey
         mock_all_ordered.return_value = [final_stage]
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
 
         assert response.status_code == 302
         assert urlparse(response.headers['location']).path == '/journeys/{}'.format(journey.id)
@@ -47,7 +53,7 @@ class Test(BaseCase):
         mock_get.return_value = self.make_journey()
         mock_all_ordered.return_value = None
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
         html = self.response_html(response)
 
         assert response.status_code == 200

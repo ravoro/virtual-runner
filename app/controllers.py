@@ -1,7 +1,9 @@
 from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
+from flask_login import login_user, login_required
 from werkzeug.wrappers import Response
 
-from .forms import JourneysAddForm, JourneysAddStageForm, UserRegisterForm
+from .auth import anonymous_required
+from .forms import JourneysAddForm, JourneysAddStageForm, UserLoginForm, UserRegisterForm
 from .models import Journey, Stage, User
 from .repositories import JourneyRepo, StageRepo, UserRepo
 
@@ -9,11 +11,13 @@ bp = Blueprint('controllers', __name__)
 
 
 @bp.route('/')
+@login_required
 def home() -> Response:
     return redirect(url_for('controllers.journeys'))
 
 
 @bp.route('/journeys')
+@login_required
 def journeys() -> Response:
     journeys = JourneyRepo.all_ordered()
     stats = {
@@ -23,6 +27,7 @@ def journeys() -> Response:
 
 
 @bp.route('/journeys/add', methods=['GET', 'POST'])
+@login_required
 def journeys_add() -> Response:
     form = JourneysAddForm()
     if form.is_submitted():
@@ -44,18 +49,21 @@ def journeys_add() -> Response:
 
 
 @bp.route('/journeys/<int:jid>')
+@login_required
 def journey_details(jid: int) -> Response:
     journey = _get_journey_data(jid)
     return render_template('journey_details.html', journey=journey)
 
 
 @bp.route('/journeys/<int:jid>/panorama')
+@login_required
 def journey_panorama(jid: int) -> Response:
     journey = _get_journey_data(jid)
     return render_template('journey_panorama.html', journey=journey)
 
 
 @bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])
+@login_required
 def journeys_add_stage(jid: int) -> Response:
     journey = _get_journey_data(jid)
 
@@ -93,8 +101,8 @@ def _get_journey_data(jid: int) -> Journey:
 
 
 @bp.route('/register', methods=['GET', 'POST'])
+@anonymous_required
 def user_register() -> Response:
-    # TODO - disallow authed users
     form = UserRegisterForm()
     if not form.is_submitted():
         return render_template('user_register.html', form=form)
@@ -111,5 +119,16 @@ def user_register() -> Response:
 
 
 @bp.route('/login', methods=['GET', 'POST'])
+@anonymous_required
 def user_login() -> Response:
-    pass
+    form = UserLoginForm()
+    if not form.is_submitted():
+        return render_template('user_login.html', form=form)
+    if not form.validate():
+        return make_response(render_template('user_login.html', form=form), 400)
+
+    user = UserRepo.get_by_email_or_username(form.email_or_username.data)
+    login_user(user)
+
+    flash('Successfully logged-in.')
+    return redirect(url_for('controllers.journeys'))

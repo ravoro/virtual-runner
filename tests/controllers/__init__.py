@@ -1,5 +1,6 @@
 from unittest import TestCase
-
+from unittest.mock import patch, Mock
+from app.repositories import UserRepo
 from bs4 import BeautifulSoup
 from flask import Response
 
@@ -18,6 +19,15 @@ class BaseCase(TestCase):
         request = {**self.valid_request, **kwargs}
         response = self.test_client.open(**request)
         return response
+
+    def make_request_with_auth(self, user=None, **kwargs):
+        """Make an authed request by calling self.make_request with the provided `user` in session."""
+        if user is None:
+            user = self.make_user()
+        with self.test_client.session_transaction() as session:
+            session['user_id'] = user.get_id()
+        with patch.object(UserRepo, 'get', return_value=user):
+            return self.make_request(**kwargs)
 
     @staticmethod
     def make_journey(**kwargs) -> Journey:

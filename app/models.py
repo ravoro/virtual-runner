@@ -1,5 +1,6 @@
 import datetime
 
+from flask_login import UserMixin
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
@@ -47,9 +48,10 @@ class Stage(db.Model):
         return '<Stage id={}>'.format(self.id)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, nullable=False)
+    username = db.Column(db.String(64), unique=True, nullable=True)
     _password_hash = db.Column('password_hash', db.String(128), nullable=False)
 
     @property

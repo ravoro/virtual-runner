@@ -1,5 +1,6 @@
-from sqlalchemy import func
 from typing import List, Optional
+
+from sqlalchemy import func
 
 from app.models import db, Journey, Stage, User
 
@@ -54,6 +55,15 @@ class UserRepo:
     @staticmethod
     def get_by_email(email: str) -> Optional[User]:
         return User.query.filter_by(email=email).first()
+
+    @staticmethod
+    def get_by_username(username: str) -> Optional[User]:
+        return User.query.filter_by(username=username).first()
+
+    @staticmethod
+    def get_by_email_or_username(email_or_username: str) -> Optional[User]:
+        return UserRepo.get_by_email(email_or_username) or \
+               UserRepo.get_by_username(email_or_username)
 
     @staticmethod
     def add(user: User) -> User:

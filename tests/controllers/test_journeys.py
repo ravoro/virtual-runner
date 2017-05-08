@@ -1,4 +1,5 @@
 from unittest.mock import patch, Mock
+from urllib.parse import urlparse
 
 from app.repositories import JourneyRepo, StageRepo
 from . import BaseCase
@@ -15,6 +16,12 @@ class Test(BaseCase):
 
         self.html_journeys_selector = '#content #journeys-table tbody tr'
 
+    def test_unauthed(self):
+        """Return 302 status and redirect to /login when user is not logged in."""
+        response = self.make_request()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/login'
+
     @patch.object(StageRepo, 'total_distance')
     @patch.object(JourneyRepo, 'all_ordered')
     def test_no_journeys(self, mock_all_ordered: Mock, mock_total_distance: Mock):
@@ -22,7 +29,7 @@ class Test(BaseCase):
         mock_all_ordered.return_value = []
         mock_total_distance.return_value = 0
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
         html = self.response_html(response)
         html_journeys = html.select(self.html_journeys_selector)
 
@@ -39,7 +46,7 @@ class Test(BaseCase):
         mock_all_ordered.return_value = [journey1, journey2]
         mock_total_distance.return_value = 0
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
         html = self.response_html(response)
         html_journeys = html.select(self.html_journeys_selector)
 
@@ -54,7 +61,7 @@ class Test(BaseCase):
         mock_all_ordered.return_value = [self.make_journey()]
         mock_total_distance.return_value = mock_distance
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
         html = self.response_html(response)
 
         assert str(mock_distance) in html.select_one('#content').text

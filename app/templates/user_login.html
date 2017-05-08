@@ -1,0 +1,29 @@
+{% from 'utils/fields.html' import field %}
+
+{% extends 'base.html' %}
+
+{% block page_title %}Login{% endblock %}
+
+{% block body_id %}page-login{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{{ url_for('controllers.home') }}">Home</a></li>
+{% endblock %}
+
+{% block page_content %}
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Not logged in.</strong> Please fix any errors below and try again.
+            </div>
+        {% endif %}
+
+        {{ field(form.email_or_username, label=None, placeholder="Email or username") }}
+
+        {{ field(form.password, label=None, placeholder="Password") }}
+
+        <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+    </form>
+{% endblock %}

@@ -1,7 +1,7 @@
-import jinja2
-import os
 import sys
 
+import jinja2
+import os
 from flask import Flask
 
 if sys.version_info < (3, 0):
@@ -18,6 +18,8 @@ def create_app(config_obj):
     from .models import db, migrate
     db.init_app(app)
     migrate.init_app(app, db)
+    from .auth import login_manager
+    login_manager.init_app(app)
 
     # prioritize a custom template directory (if one is configured)
     if app.config.get('CUSTOM_TEMPLATES_DIR'):

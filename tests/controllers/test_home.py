@@ -12,8 +12,14 @@ class Test(BaseCase):
             'path': '/'
         }
 
+    def test_unauthed(self):
+        """Return 302 status and redirect to /login when user is not logged in."""
+        response = self.make_request()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/login'
+
     def test_redirect(self):
         """Return 302 status and redirect to /journeys."""
-        response = self.make_request()
+        response = self.make_request_with_auth()
         assert response.status_code == 302
         assert urlparse(response.headers['location']).path == '/journeys'

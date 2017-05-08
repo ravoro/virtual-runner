@@ -10,13 +10,13 @@ class Test(BaseCase):
         super().setUp()
 
         self.valid_data = {
-            'email': 'test@example.com',
+            'email_or_username': 'test@example.com',
             'password': 'samplepassword'
         }
 
         self.valid_request = {
             'method': 'POST',
-            'path': '/register',
+            'path': '/login',
             'content_type': 'application/x-www-form-urlencoded',
             'data': self.valid_data
         }
@@ -27,30 +27,29 @@ class Test(BaseCase):
         assert response.status_code == 302
         assert urlparse(response.headers['location']).path == '/journeys'
 
-    @patch.object(UserRepo, 'get_by_email')
-    def test_invalid_submission(self, mock_get_by_email: Mock):
-        """Return 400 status and re-present the page with UserRegisterForm errors."""
-        mock_get_by_email.return_value = None
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_invalid_submission(self, mock_get_by_email_or_username: Mock):
+        """Return 400 status and re-present the page with UserLoginForm errors."""
+        mock_get_by_email_or_username.return_value = None
         invalid_data = self.valid_data.copy()
-        invalid_data['email'] = ''
+        invalid_data['email_or_username'] = ''
         response = self.make_request(data=invalid_data)
         html = self.response_html(response)
 
         assert response.status_code == 400
         assert "Please fix any errors below and try again" in html.select_one("#content form .alert").text
 
-    @patch.object(UserRepo, 'add')
-    @patch.object(UserRepo, 'get_by_email')
-    def test_valid_submission(self, mock_get_by_email: Mock, mock_add: Mock):
-        """Return 302 status, save user to db, and redirect to the login page when given valid submission."""
-        mock_get_by_email.return_value = None
-        user = self.make_user(**self.valid_data)
-        mock_add.return_value = user
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_valid_submission(self, mock_get_by_email_or_username: Mock):
+        """Return 302 status, create a session and redirect to the journeys page when given valid submission."""
+        user = self.make_user(email=self.valid_data['email_or_username'], password=self.valid_data['password'])
+        mock_get_by_email_or_username.return_value = user
 
         response = self.make_request()
 
-        assert mock_add.call_count is 1
         with self.test_client.session_transaction() as session:
-            assert session['_flashes'][0][1] == 'Successfully registered.'
+            assert session['_flashes'][0][1] == 'Successfully logged-in.'
+            assert session['user_id'] == str(user.id)
+            assert len(session['_id']) > 0
         assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/login'
+        assert urlparse(response.headers['location']).path == '/journeys'

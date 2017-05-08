@@ -25,11 +25,17 @@ class Test(BaseCase):
             'data': self.valid_data
         }
 
+    def test_unauthed(self):
+        """Return 302 status and redirect to /login when user is not logged in."""
+        response = self.make_request()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/login'
+
     def test_invalid_submission(self):
         """Return 400 status and re-present the page with JourneysAddForm errors."""
         invalid_data = self.valid_data.copy()
         invalid_data['name'] = ''
-        response = self.make_request(data=invalid_data)
+        response = self.make_request_with_auth(data=invalid_data)
         html = self.response_html(response)
 
         assert response.status_code == 400
@@ -41,7 +47,7 @@ class Test(BaseCase):
         journey = self.make_journey(**self.valid_data)
         mock_create.return_value = journey
 
-        response = self.make_request()
+        response = self.make_request_with_auth()
 
         assert mock_create.call_count is 1
         with self.test_client.session_transaction() as session:

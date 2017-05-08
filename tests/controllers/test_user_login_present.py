@@ -9,7 +9,7 @@ class Test(BaseCase):
 
         self.valid_request = {
             'method': 'GET',
-            'path': '/register'
+            'path': '/login'
         }
 
     def test_authed(self):
@@ -19,10 +19,10 @@ class Test(BaseCase):
         assert urlparse(response.headers['location']).path == '/journeys'
 
     def test_empty_form(self):
-        """Return 200 status and present an empty UserRegisterForm."""
+        """Return 200 status and present an empty UserLoginForm."""
         response = self.make_request()
         html = self.response_html(response)
 
         assert response.status_code == 200
-        assert html.select_one("#content form input[name=email]").attrs['value'] is ''
+        assert html.select_one("#content form input[name=email_or_username]").attrs['value'] is ''
         assert html.select_one("#content form input[name=password]").attrs['value'] is ''
