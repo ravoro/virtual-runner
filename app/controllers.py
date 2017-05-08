@@ -11,9 +11,9 @@ bp = Blueprint('controllers', __name__)
 
 
 @bp.route('/')
-@login_required
+@anonymous_required
 def home() -> Response:
-    return redirect(url_for('controllers.journeys'))
+    return render_template('home.html')
 
 
 @bp.route('/journeys')
