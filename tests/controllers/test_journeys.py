@@ -34,7 +34,7 @@ class Test(BaseCase):
         html_journeys = html.select(self.html_journeys_selector)
 
         assert response.status_code == 200
-        assert len(html_journeys) == 0
+        assert len(html_journeys) == 1
         assert "No journeys created." in html.select_one('#content').text
 
     @patch.object(StageRepo, 'total_distance')

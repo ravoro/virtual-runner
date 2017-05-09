@@ -3,6 +3,7 @@ import datetime
 from flask_login import UserMixin
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.mysql import FLOAT
 from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
@@ -10,15 +11,17 @@ migrate = Migrate()
 
 
 class Journey(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    distance_meters = db.Column(db.Integer)
-    start_lat = db.Column(db.Float)
-    start_lng = db.Column(db.Float)
-    finish_lat = db.Column(db.Float)
-    finish_lng = db.Column(db.Float)
-    date_created = db.Column(db.DateTime, default=datetime.datetime.now)
-    stages = db.relationship('Stage', backref='journey')
+    __tablename__ = 'journeys'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    distance_meters = db.Column(db.Integer, nullable=False)
+    start_lat = db.Column(FLOAT(10, 6), nullable=False)
+    start_lng = db.Column(FLOAT(10, 6), nullable=False)
+    finish_lat = db.Column(FLOAT(10, 6), nullable=False)
+    finish_lng = db.Column(FLOAT(10, 6), nullable=False)
+    date_created = db.Column(db.DateTime, nullable=True, default=datetime.datetime.now)
+    stages = db.relationship('Stage', backref='journeys')
 
     @property
     def completed_distance(self) -> int:
@@ -39,17 +42,19 @@ class Journey(db.Model):
 
 
 class Stage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    distance_meters = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime, default=datetime.datetime.now)
-    journey_id = db.Column(db.Integer, db.ForeignKey('journey.id'))
+    __tablename__ = 'stages'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    journey_id = db.Column(db.Integer, db.ForeignKey('journeys.id'), nullable=False)
+    distance_meters = db.Column(db.Integer, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=True, default=datetime.datetime.now)
 
     def __repr__(self) -> str:
         return '<Stage id={}>'.format(self.id)
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(64), unique=True, nullable=False)
     username = db.Column(db.String(64), unique=True, nullable=True)
     _password_hash = db.Column('password_hash', db.String(128), nullable=False)

@@ -1,5 +1,5 @@
 from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
-from flask_login import login_user, login_required
+from flask_login import current_user, login_user, login_required
 from werkzeug.wrappers import Response
 
 from .auth import anonymous_required
@@ -19,9 +19,9 @@ def home() -> Response:
 @bp.route('/journeys')
 @login_required
 def journeys() -> Response:
-    journeys = JourneyRepo.all_ordered()
+    journeys = JourneyRepo.all_ordered(current_user.id)
     stats = {
-        'total_distance': StageRepo.total_distance()
+        'total_distance': StageRepo.total_distance(current_user.id)
     }
     return render_template('journeys.html', journeys=journeys, stats=stats)
 
@@ -33,6 +33,7 @@ def journeys_add() -> Response:
     if form.is_submitted():
         if form.validate():
             journey = JourneyRepo.create(Journey(
+                user_id=int(current_user.id),
                 name=str(form.name.data),
                 distance_meters=int(form.distance_meters.data),
                 start_lat=float(form.start_lat.data),
@@ -75,8 +76,8 @@ def journeys_add_stage(jid: int) -> Response:
     if form.is_submitted():
         if form.validate():
             StageRepo.create(Stage(
-                distance_meters=int(form.distance_meters.data),
-                journey=journey
+                journeys=journey,
+                distance_meters=int(form.distance_meters.data)
             ))
 
             if journey.is_completed:
@@ -90,12 +91,12 @@ def journeys_add_stage(jid: int) -> Response:
         return render_template('journey_add_stage.html', journey=journey, form=form)
 
 
-def _get_journey_data(jid: int) -> Journey:
-    """Fetch journey record including any relevant additional details. Raise 404 exception if journey not found."""
-    journey = JourneyRepo.get(jid)
+def _get_journey_data(journey_id: int) -> Journey:
+    """Fetch journey record owned by the user, including any relevant additional details. Raise 404 if not found."""
+    journey = JourneyRepo.get(user_id=current_user.id, journey_id=journey_id)
     if not journey:
         return abort(404)
-    stages = StageRepo.all_ordered(jid)
+    stages = StageRepo.all_ordered(journey_id)
     journey.stages_ordered = stages
     return journey
 

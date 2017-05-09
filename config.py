@@ -7,7 +7,7 @@ class ProdConfig:
     TESTING = False
     SECRET_KEY = 'mr|6I0fWE~!)yd]FwWKO7$j`.>D}Z,7OLOOlzV/xme<&S/f+xGDa|.Z=</Z2A[P|'
     GOOGLE_MAPS_API_KEY = 'AIzaSyCWMRABwAqpwvWXw275HljKmIRMOvJ66Cg'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'journeys.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SITE_VIRTUALRUNNER_DB_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CUSTOM_TEMPLATES_DIR = os.path.join(BASE_DIR, 'app_data', 'templates')
     RELEASE_VERSION = 20170503
@@ -15,7 +15,7 @@ class ProdConfig:
 
 class DevConfig(ProdConfig):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(ProdConfig.BASE_DIR, 'tmp', 'local.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql://virtualrunner:J6SqvOxROEYPokWA@localhost/virtualrunner'
     CUSTOM_TEMPLATES_DIR = None
     # DEBUG_TB_ENABLED = True
     # DEBUG_TB_INTERCEPT_REDIRECTS = False

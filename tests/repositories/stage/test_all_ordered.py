@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import config
 from app import create_app
-from app.models import db, Journey, Stage
+from app.models import db, Journey, Stage, User
 from app.repositories import StageRepo
 
 
@@ -14,6 +14,7 @@ class TestAllOrdered(TestCase):
         def create_journey(id):
             journey = Journey(
                 id=id,
+                user_id=1,
                 name="journey #{}".format(id),
                 distance_meters=12345,
                 start_lat=0.0,
@@ -28,9 +29,9 @@ class TestAllOrdered(TestCase):
         def create_stage(id, date, jid):
             stage = Stage(
                 id=id,
+                journey_id=jid,
                 distance_meters=12345,
-                date_created=date,
-                journey_id=jid
+                date_created=date
             )
             db.session.add(stage)
             db.session.commit()
@@ -46,6 +47,8 @@ class TestAllOrdered(TestCase):
         self.app = create_app(config.TestConfig)
         with self.app.app_context():
             db.create_all()
+            db.session.add(User(id=1, email='test@example.com', password='samplepassword'))
+            db.session.commit()
 
     def tearDown(self):
         with self.app.app_context():

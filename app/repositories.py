@@ -7,8 +7,9 @@ from app.models import db, Journey, Stage, User
 
 class JourneyRepo:
     @staticmethod
-    def all_ordered() -> List[Journey]:
+    def all_ordered(user_id: int) -> List[Journey]:
         return Journey.query \
+            .filter_by(user_id=user_id) \
             .order_by(Journey.date_created.desc(), Journey.id.desc()) \
             .all()
 
@@ -19,17 +20,19 @@ class JourneyRepo:
         return journey
 
     @staticmethod
-    def get(id: int) -> Optional[Journey]:
-        return Journey.query.get(id)
+    def get(user_id: int, journey_id: int) -> Optional[Journey]:
+        return Journey.query \
+            .filter_by(id=journey_id, user_id=user_id) \
+            .one_or_none()
 
 
 class StageRepo:
     @staticmethod
-    def all_ordered(jid: int) -> List[Stage]:
+    def all_ordered(journey_id: int) -> List[Stage]:
         return db.session \
             .query(Stage) \
             .join(Journey.stages) \
-            .filter_by(journey_id=jid) \
+            .filter_by(journey_id=journey_id) \
             .order_by(Stage.date_created.desc(), Stage.id.desc()) \
             .all()
 
@@ -40,11 +43,18 @@ class StageRepo:
         return stage
 
     @staticmethod
-    def total_distance() -> int:
-        """Total sum of all stage distances."""
-        return db.session \
+    def total_distance(user_id: int) -> int:
+        """Total sum of all stage distances for the given user."""
+        journeys_subquery = db.session \
+            .query(Journey.id) \
+            .join(User) \
+            .filter(User.id == user_id) \
+            .subquery()
+        distance_sum = db.session \
             .query(func.sum(Stage.distance_meters)) \
+            .filter(Stage.journey_id.in_(journeys_subquery)) \
             .scalar()
+        return int(distance_sum)
 
 
 class UserRepo:
