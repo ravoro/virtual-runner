@@ -47,7 +47,7 @@ class Test(BaseCase):
     @patch.object(StageRepo, 'all_ordered')
     @patch.object(JourneyRepo, 'get')
     def test_empty_form(self, mock_get: Mock, mock_all_ordered: Mock):
-        """Return 200 status and present an empty JourneysAddStageForm."""
+        """Return 200 status and present an empty JourneyAddStageForm."""
         mock_get.return_value = self.make_journey()
         mock_all_ordered.return_value = None
 

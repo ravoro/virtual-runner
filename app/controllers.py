@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.wrappers import Response
 
 from .auth import anonymous_required
-from .forms import JourneysAddForm, JourneysAddStageForm, UserLoginForm, UserRegisterForm
+from .forms import JourneysAddForm, JourneyAddStageForm, UserLoginForm, UserRegisterForm
 from .models import Journey, Stage, User
 from .repositories import JourneyRepo, StageRepo, UserRepo
 
@@ -30,23 +30,23 @@ def journeys() -> Response:
 @login_required
 def journeys_add() -> Response:
     form = JourneysAddForm()
-    if form.is_submitted():
-        if form.validate():
-            journey = JourneyRepo.create(Journey(
-                user_id=int(current_user.id),
-                name=str(form.name.data),
-                distance_meters=int(form.distance_meters.data),
-                start_lat=float(form.start_lat.data),
-                start_lng=float(form.start_lng.data),
-                finish_lat=float(form.finish_lat.data),
-                finish_lng=float(form.finish_lng.data),
-            ))
-            flash('Successfully created new journey.')
-            return redirect(url_for('controllers.journey_details', jid=journey.id))
-        else:
-            return make_response(render_template('journeys_add.html', form=form), 400)
-    else:
+    if not form.is_submitted():
         return render_template('journeys_add.html', form=form)
+    if not form.validate():
+        return make_response(render_template('journeys_add.html', form=form), 400)
+
+    journey = JourneyRepo.create(Journey(
+        user_id=int(current_user.id),
+        name=str(form.name.data),
+        distance_meters=int(form.distance_meters.data),
+        start_lat=float(form.start_lat.data),
+        start_lng=float(form.start_lng.data),
+        finish_lat=float(form.finish_lat.data),
+        finish_lng=float(form.finish_lng.data),
+    ))
+
+    flash('Successfully created new journey.')
+    return redirect(url_for('controllers.journey_details', jid=journey.id))
 
 
 @bp.route('/journeys/<int:jid>')
@@ -65,30 +65,28 @@ def journey_panorama(jid: int) -> Response:
 
 @bp.route('/journeys/<int:jid>/add-run', methods=['GET', 'POST'])
 @login_required
-def journeys_add_stage(jid: int) -> Response:
+def journey_add_stage(jid: int) -> Response:
     journey = _get_journey_data(jid)
-
     if journey.is_completed:
         flash('The journey has been completed.')
         return redirect(url_for('controllers.journey_details', jid=journey.id))
 
-    form = JourneysAddStageForm()
-    if form.is_submitted():
-        if form.validate():
-            StageRepo.create(Stage(
-                journeys=journey,
-                distance_meters=int(form.distance_meters.data)
-            ))
-
-            if journey.is_completed:
-                flash(render_template('flash_messages/journey_add_stage_complete.html'), 'html')
-            else:
-                flash('Successfully added new run.')
-            return redirect(url_for('controllers.journey_panorama', jid=journey.id))
-        else:
-            return make_response(render_template('journey_add_stage.html', journey=journey, form=form), 400)
-    else:
+    form = JourneyAddStageForm()
+    if not form.is_submitted():
         return render_template('journey_add_stage.html', journey=journey, form=form)
+    if not form.validate():
+        return make_response(render_template('journey_add_stage.html', journey=journey, form=form), 400)
+
+    StageRepo.create(Stage(
+        journeys=journey,
+        distance_meters=int(form.distance_meters.data)
+    ))
+
+    if journey.is_completed:
+        flash(render_template('flash_messages/journey_add_stage_complete.html'), 'html')
+    else:
+        flash('Successfully added new run.')
+    return redirect(url_for('controllers.journey_panorama', jid=journey.id))
 
 
 def _get_journey_data(journey_id: int) -> Journey:

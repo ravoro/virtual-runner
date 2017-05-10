@@ -26,8 +26,8 @@
         <span>Details</span>
     </button>
     {% if not journey.is_completed %}
-        <a class="btn btn-default {% if 'controllers.journeys_add_stage' == request.endpoint %}active{% endif %}"
-           href="{{ url_for('controllers.journeys_add_stage', jid=journey.id) }}">
+        <a class="btn btn-default {% if 'controllers.journey_add_stage' == request.endpoint %}active{% endif %}"
+           href="{{ url_for('controllers.journey_add_stage', jid=journey.id) }}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             <span>Record a new run</span>
         </a>

@@ -53,7 +53,7 @@ class Test(BaseCase):
     @patch.object(StageRepo, 'all_ordered')
     @patch.object(JourneyRepo, 'get')
     def test_invalid_submission(self, mock_get: Mock, mock_all_ordered: Mock):
-        """Return 400 status and re-present the page with JourneysAddStageForm errors when given invalid data."""
+        """Return 400 status and re-present the page with JourneyAddStageForm errors when given invalid data."""
         journey = self.make_journey()
         mock_get.return_value = journey
         mock_all_ordered.return_value = None

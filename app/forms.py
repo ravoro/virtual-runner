@@ -15,7 +15,7 @@ class JourneysAddForm(FlaskForm):
     finish_lng = DecimalField(validators=[NumberRange(-180, 180)])
 
 
-class JourneysAddStageForm(FlaskForm):
+class JourneyAddStageForm(FlaskForm):
     distance_meters = IntegerField(validators=[NumberRange(min=100)])
 
 
