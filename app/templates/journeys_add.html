@@ -36,6 +36,10 @@
     <li><a href="{{ url_for('controllers.journeys') }}">Journeys</a></li>
 {% endblock %}
 
+{% block page_actions %}
+    {% include 'includes/nav_profile_settings.html' %}
+{% endblock %}
+
 {% block page_content %}
     <form method="post">
         {{ form.hidden_tag() }}

@@ -2,7 +2,7 @@ from unittest.mock import patch, Mock
 from urllib.parse import urlparse
 
 from app.repositories import UserRepo
-from . import BaseCase
+from . import BaseCase, common_test_require_anonymous
 
 
 class Test(BaseCase):
@@ -21,11 +21,9 @@ class Test(BaseCase):
             'data': self.valid_data
         }
 
-    def test_authed(self):
-        """Return 302 status and redirect to /journeys when user is already logged in."""
-        response = self.make_request_with_auth()
-        assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/journeys'
+    @common_test_require_anonymous
+    def test_auth(self):
+        pass
 
     @patch.object(UserRepo, 'get_by_email_or_username')
     def test_invalid_submission(self, mock_get_by_email_or_username: Mock):
@@ -48,7 +46,7 @@ class Test(BaseCase):
         response = self.make_request()
 
         with self.test_client.session_transaction() as session:
-            assert session['_flashes'][0][1] == 'Successfully logged-in.'
+            assert session['_flashes'][0][1] == 'Successfully logged in.'
             assert session['user_id'] == str(user.id)
             assert len(session['_id']) > 0
         assert response.status_code == 302

@@ -1,6 +1,4 @@
-from urllib.parse import urlparse
-
-from . import BaseCase
+from . import BaseCase, common_test_require_anonymous
 
 
 class Test(BaseCase):
@@ -12,11 +10,9 @@ class Test(BaseCase):
             'path': '/register'
         }
 
-    def test_authed(self):
-        """Return 302 status and redirect to /journeys when user is already logged in."""
-        response = self.make_request_with_auth()
-        assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/journeys'
+    @common_test_require_anonymous
+    def test_auth(self):
+        pass
 
     def test_empty_form(self):
         """Return 200 status and present an empty UserRegisterForm."""

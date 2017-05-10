@@ -1,12 +1,43 @@
-from unittest import TestCase
-from unittest.mock import patch, Mock
-from app.repositories import UserRepo
+from unittest.mock import patch
+from urllib.parse import urlparse
+
 from bs4 import BeautifulSoup
 from flask import Response
+from six import wraps
+from unittest import TestCase
 
 import config
 from app import create_app
 from app.models import Journey, Stage, User
+from app.repositories import UserRepo
+
+
+def common_test_require_auth(f):
+    """Decorator for a common test requirement. Ensure user is authed when accessing the endpoint."""
+
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        """Return 302 status and redirect to /login when user is not logged in."""
+        response = self.make_request()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/login'
+        return f(self, *args, **kwargs)
+
+    return wrapper
+
+
+def common_test_require_anonymous(f):
+    """Decorator for a common test requirement. Ensure user is anonymous when accessing the endpoint."""
+
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        """Return 302 status and redirect to /journeys when user is already logged in."""
+        response = self.make_request_with_auth()
+        assert response.status_code == 302
+        assert urlparse(response.headers['location']).path == '/journeys'
+        return f(self, *args, **kwargs)
+
+    return wrapper
 
 
 class BaseCase(TestCase):

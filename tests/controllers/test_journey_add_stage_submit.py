@@ -2,7 +2,7 @@ from unittest.mock import patch, Mock
 from urllib.parse import urlparse
 
 from app.repositories import JourneyRepo, StageRepo
-from . import BaseCase
+from . import BaseCase, common_test_require_auth
 
 
 class Test(BaseCase):
@@ -20,11 +20,9 @@ class Test(BaseCase):
             'data': self.valid_data
         }
 
-    def test_unauthed(self):
-        """Return 302 status and redirect to /login when user is not logged in."""
-        response = self.make_request()
-        assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/login'
+    @common_test_require_auth
+    def test_auth(self):
+        pass
 
     @patch.object(JourneyRepo, 'get')
     def test_not_found(self, mock_get: Mock):

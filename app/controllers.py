@@ -1,5 +1,5 @@
 from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
-from flask_login import current_user, login_user, login_required
+from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.wrappers import Response
 
 from .auth import anonymous_required
@@ -131,5 +131,13 @@ def user_login() -> Response:
     user = UserRepo.get_by_email_or_username(form.email_or_username.data)
     login_user(user)
 
-    flash('Successfully logged-in.')
+    flash('Successfully logged in.')
     return redirect(url_for('controllers.journeys'))
+
+
+@bp.route('/logout', methods=['GET'])
+@login_required
+def user_logout() -> Response:
+    logout_user()
+    flash('Successfully logged out.')
+    return redirect(url_for('controllers.home'))

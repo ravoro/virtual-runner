@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from . import BaseCase
+from . import BaseCase, common_test_require_auth
 
 
 class Test(BaseCase):
@@ -12,11 +12,9 @@ class Test(BaseCase):
             'path': '/journeys/add'
         }
 
-    def test_unauthed(self):
-        """Return 302 status and redirect to /login when user is not logged in."""
-        response = self.make_request()
-        assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/login'
+    @common_test_require_auth
+    def test_auth(self):
+        pass
 
     def test_empty_form(self):
         """Return 200 status and present an empty JourneysAddForm."""
