@@ -14,7 +14,7 @@ class JourneyRepo:
             .all()
 
     @staticmethod
-    def create(journey: Journey) -> Journey:
+    def add(journey: Journey) -> Journey:
         db.session.add(journey)
         db.session.commit()
         return journey
@@ -37,7 +37,7 @@ class StageRepo:
             .all()
 
     @staticmethod
-    def create(stage: Stage) -> Stage:
+    def add(stage: Stage) -> Stage:
         db.session.add(stage)
         db.session.commit()
         return stage

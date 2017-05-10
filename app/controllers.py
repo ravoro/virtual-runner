@@ -35,7 +35,7 @@ def journeys_add() -> Response:
     if not form.validate():
         return make_response(render_template('journeys_add.html', form=form), 400)
 
-    journey = JourneyRepo.create(Journey(
+    journey = JourneyRepo.add(Journey(
         user_id=int(current_user.id),
         name=str(form.name.data),
         distance_meters=int(form.distance_meters.data),
@@ -77,7 +77,7 @@ def journey_add_stage(jid: int) -> Response:
     if not form.validate():
         return make_response(render_template('journey_add_stage.html', journey=journey, form=form), 400)
 
-    StageRepo.create(Stage(
+    StageRepo.add(Stage(
         journeys=journey,
         distance_meters=int(form.distance_meters.data)
     ))

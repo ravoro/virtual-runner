@@ -66,27 +66,27 @@ class Test(BaseCase):
         assert response.status_code == 400
         assert "Please fix any errors below and try again" in html.select_one("#content form .alert").text
 
-    @patch.object(StageRepo, 'create')
+    @patch.object(StageRepo, 'add')
     @patch.object(StageRepo, 'all_ordered')
     @patch.object(JourneyRepo, 'get')
-    def test_non_final_stage(self, mock_get: Mock, mock_all_ordered: Mock, mock_create: Mock):
-        """Return 302 status, save stage to db, and redirect to journey's page when adding a non-final stage."""
+    def test_non_final_stage(self, mock_get: Mock, mock_all_ordered: Mock, mock_add: Mock):
+        """Return 302 status, add stage to db, and redirect to journey's page when adding a non-final stage."""
         journey = self.make_journey()
         mock_get.return_value = journey
         mock_all_ordered.return_value = None
 
         response = self.make_request_with_auth()
 
-        assert mock_create.call_count is 1
+        assert mock_add.call_count is 1
         with self.test_client.session_transaction() as session:
             assert session['_flashes'][0][1] == 'Successfully added new run.'
         assert response.status_code == 302
         assert urlparse(response.headers['location']).path == '/journeys/{}/panorama'.format(journey.id)
 
-    @patch.object(StageRepo, 'create')
+    @patch.object(StageRepo, 'add')
     @patch.object(StageRepo, 'all_ordered')
     @patch.object(JourneyRepo, 'get')
-    def test_final_stage_message(self, mock_get: Mock, mock_all_ordered: Mock, mock_create: Mock):
+    def test_final_stage_message(self, mock_get: Mock, mock_all_ordered: Mock, mock_add: Mock):
         """Display an html flash message when submitting the final stage."""
         journey = self.make_journey()
         mock_get.return_value = journey

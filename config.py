@@ -10,7 +10,7 @@ class ProdConfig:
     SQLALCHEMY_DATABASE_URI = os.environ.get('SITE_VIRTUALRUNNER_DB_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CUSTOM_TEMPLATES_DIR = os.path.join(BASE_DIR, 'app_data', 'templates')
-    RELEASE_VERSION = 20170503
+    RELEASE_VERSION = 20170512
 
 
 class DevConfig(ProdConfig):
