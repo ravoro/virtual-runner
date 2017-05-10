@@ -50,5 +50,7 @@ class Test(BaseCase):
         assert mock_add.call_count is 1
         with self.test_client.session_transaction() as session:
             assert session['_flashes'][0][1] == 'Successfully registered.'
+            assert session['user_id'] == str(user.id)
+            assert len(session['_id']) > 0
         assert response.status_code == 302
-        assert urlparse(response.headers['location']).path == '/login'
+        assert urlparse(response.headers['location']).path == '/journeys'

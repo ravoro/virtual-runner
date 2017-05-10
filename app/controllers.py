@@ -110,13 +110,14 @@ def user_register() -> Response:
     if not form.validate():
         return make_response(render_template('user_register.html', form=form), 400)
 
-    UserRepo.add(User(
+    user = UserRepo.add(User(
         email=form.email.data,
         password=form.password.data
     ))
+    login_user(user)
 
     flash('Successfully registered.')
-    return redirect(url_for('controllers.user_login'))
+    return redirect(url_for('controllers.journeys'))
 
 
 @bp.route('/login', methods=['GET', 'POST'])

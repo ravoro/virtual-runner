@@ -54,7 +54,7 @@ class StageRepo:
             .query(func.sum(Stage.distance_meters)) \
             .filter(Stage.journey_id.in_(journeys_subquery)) \
             .scalar()
-        return int(distance_sum)
+        return int(distance_sum) if distance_sum else 0
 
 
 class UserRepo:
