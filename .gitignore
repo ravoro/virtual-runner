@@ -1,8 +1,8 @@
 .idea/
 __pycache__/
 *.pyc
-*.db
 
 app_data/
 venv/
 tmp/
+config.py
