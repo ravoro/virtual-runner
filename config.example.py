@@ -2,6 +2,10 @@ import os
 
 
 class BaseConfig:
+    DEBUG = False
+
+    TESTING = False
+
     SECRET_KEY = os.environ.get('VIRTUALRUNNER_SECRET_KEY')
 
     # Base directory for the project
@@ -23,15 +27,17 @@ class BaseConfig:
 
 
 class ProdConfig(BaseConfig):
-    DEBUG = False
-    TESTING = False
+    pass
 
 
 class DevConfig(BaseConfig):
     DEBUG = True
+    SECRET_KEY = 'dev-secret-123'
+    SQLALCHEMY_DATABASE_URI = 'mysql://virtualrunner:J6SqvOxROEYPokWA@localhost/virtualrunner'
 
 
 class TestConfig(BaseConfig):
     TESTING = True
+    SECRET_KEY = 'test-secret-123'
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
     WTF_CSRF_ENABLED = False
