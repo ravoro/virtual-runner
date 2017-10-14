@@ -4,4 +4,5 @@ python:
     - 3.6
     - nightly
 script:
+    - cp config.example.py config.py
     - ./scripts/test.sh
