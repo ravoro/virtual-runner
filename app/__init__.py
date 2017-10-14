@@ -4,8 +4,8 @@ import jinja2
 import os
 from flask import Flask
 
-if sys.version_info < (3, 0):
-    print("Warning: code is written for Python3. You may run into issues running a different version of python.")
+if sys.version_info < (3, 5):
+    print("Warning: code is written for Python3.5+. You may run into issues running a different version of python.")
 
 
 def create_app(config_obj):
