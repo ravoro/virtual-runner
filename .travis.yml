@@ -3,6 +3,12 @@ python:
     - 3.5
     - 3.6
     - nightly
+install:
+    - pip install -r requirements.txt
+    - pip install coveralls
 script:
+    - mkdir tmp
     - cp config.example.py config.py
-    - ./scripts/test.sh
+    - ./scripts/test_coverage.sh
+after_success:
+    - coveralls

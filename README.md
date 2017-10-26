@@ -1,6 +1,7 @@
 # VirtualRunner
 
 [![Build Status](https://travis-ci.org/ravoro/virtual-runner.svg?branch=master)](https://travis-ci.org/ravoro/virtual-runner)
+[![Coverage Status](https://coveralls.io/repos/github/ravoro/virtual-runner/badge.svg?branch=master)](https://coveralls.io/github/ravoro/virtual-runner?branch=master)
 
 _You can now run **anywhere!**_
 
