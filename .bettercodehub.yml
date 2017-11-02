@@ -1,0 +1,28 @@
+component_depth: 1
+languages:
+  - name: python
+    production:
+      include:
+        - /.*\.py
+      exclude:
+        - /migrations/.*
+    test:
+      include:
+        - /tests/.*
+
+
+  - name: javascript
+    production:
+      include:
+        - /app/static/js/.*\.js
+      exclude:
+        - /app/static/lib/.*
+
+
+  - name: script
+    production:
+      include:
+        - /scripts/.*\.sh
+    test:
+      exclude:
+        - /.*

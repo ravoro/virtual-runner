@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ravoro/virtual-runner.svg?branch=master)](https://travis-ci.org/ravoro/virtual-runner)
 [![Coverage Status](https://coveralls.io/repos/github/ravoro/virtual-runner/badge.svg?branch=master)](https://coveralls.io/github/ravoro/virtual-runner?branch=master)
+[![BCH compliance](https://bettercodehub.com/edge/badge/ravoro/virtual-runner?branch=master)](https://bettercodehub.com/)
 
 _You can now run **anywhere!**_
 
