@@ -6,3 +6,5 @@ app_data/
 venv/
 tmp/
 config.py
+
+todo.md
