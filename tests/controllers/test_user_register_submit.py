@@ -10,7 +10,7 @@ class Test(BaseCase):
         super().setUp()
 
         self.valid_data = {
-            'email': 'test@example.com',
+            'email_or_username': 'test@example.com',
             'password': 'samplepassword'
         }
 
@@ -25,12 +25,12 @@ class Test(BaseCase):
     def test_auth(self):
         pass
 
-    @patch.object(UserRepo, 'get_by_email')
-    def test_invalid_submission(self, mock_get_by_email: Mock):
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_invalid_submission(self, mock_get: Mock):
         """Return 400 status and re-present the page with UserRegisterForm errors."""
-        mock_get_by_email.return_value = None
+        mock_get.return_value = None
         invalid_data = self.valid_data.copy()
-        invalid_data['email'] = ''
+        invalid_data['email_or_username'] = ''
         response = self.make_request(data=invalid_data)
         html = self.response_html(response)
 
@@ -38,11 +38,11 @@ class Test(BaseCase):
         assert "Please fix any errors below and try again" in html.select_one("#content form .alert").text
 
     @patch.object(UserRepo, 'add')
-    @patch.object(UserRepo, 'get_by_email')
-    def test_valid_submission(self, mock_get_by_email: Mock, mock_add: Mock):
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_valid_submission(self, mock_get: Mock, mock_add: Mock):
         """Return 302 status, save user to db, and redirect to the login page when given valid submission."""
-        mock_get_by_email.return_value = None
-        user = self.make_user(**self.valid_data)
+        mock_get.return_value = None
+        user = self.make_user(email=self.valid_data['email_or_username'], password=self.valid_data['password'])
         mock_add.return_value = user
 
         response = self.make_request()
@@ -54,3 +54,30 @@ class Test(BaseCase):
             assert len(session['_id']) > 0
         assert response.status_code == 302
         assert urlparse(response.headers['location']).path == '/journeys'
+
+    @patch.object(UserRepo, 'add')
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_email_submission(self, mock_get: Mock, mock_add: Mock):
+        """Ensure added record has an email and no username, when registering with an email."""
+        mock_get.return_value = None
+        mock_add.return_value = self.make_user()
+
+        self.make_request()
+
+        added_user = mock_add.call_args[0][0]
+        assert added_user.email == self.valid_data['email_or_username']
+        assert added_user.username is None
+
+    @patch.object(UserRepo, 'add')
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_username_submission(self, mock_get: Mock, mock_add: Mock):
+        """Ensure added record has a username and no email, when registering with a username."""
+        self.valid_data['email_or_username'] = 'testuser'
+        mock_get.return_value = None
+        mock_add.return_value = self.make_user()
+
+        self.make_request()
+
+        added_user = mock_add.call_args[0][0]
+        assert added_user.email is None
+        assert added_user.username == self.valid_data['email_or_username']

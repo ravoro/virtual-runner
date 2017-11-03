@@ -88,6 +88,7 @@ class BaseCase(TestCase):
         base_vals = {
             'id': 123,
             'email': 'test@example.com',
+            'username': None,
             'password': 'samplepassword'
         }
         vals = {**base_vals, **kwargs}

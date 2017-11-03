@@ -1,3 +1,4 @@
+import re
 from flask import abort, flash, Blueprint, url_for, redirect, render_template, make_response
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.wrappers import Response
@@ -108,10 +109,14 @@ def user_register() -> Response:
     if not form.validate():
         return make_response(render_template('user_register.html', form=form), 400)
 
+    is_email = re.match(r'\S+@\S+\.\S+', form.email_or_username.data)
+
     user = UserRepo.add(User(
-        email=form.email.data,
+        email=form.email_or_username.data if is_email else None,
+        username=form.email_or_username.data if not is_email else None,
         password=form.password.data
     ))
+
     login_user(user)
 
     flash('Successfully registered.')
