@@ -4,46 +4,73 @@ function initMap() {
     finishCoords = finishCoords ? new google.maps.LatLng(finishCoords) : null;
 
 
-    // create maps
-    var startMap = drawMap("map-start", startCoords);
-    var finishMap = drawMap("map-finish", finishCoords);
-
-    function drawMap(mapID, centerCoords) {
-        return new google.maps.Map(document.getElementById(mapID), {
-            zoom: 8,
-            center: centerCoords || defaultCoords
-        });
-    }
+    // create map
+    var mapID = "map-start-finish";
+    var map = new google.maps.Map(document.getElementById(mapID), {
+        zoom: 8,
+        center: startCoords || defaultCoords
+    });
 
 
     // create markers
-    var startMarker = startCoords ? drawMarker(startMap, startCoords) : null;
-    var finishMarker = finishCoords ? drawMarker(finishMap, finishCoords) : null;
+    var startMarker = startCoords ? drawStartMarker(startCoords) : null;
+    var finishMarker = finishCoords ? drawFinishMarker(finishCoords) : null;
 
-    function drawMarker(map, coords) {
+    function drawMarker(map, coords, icon) {
         return new google.maps.Marker({
             position: coords,
-            map: map
+            map: map,
+            icon: icon
         });
     }
 
+    function drawStartMarker(coords) {
+        return drawMarker(map, coords, 'http://maps.google.com/mapfiles/dd-start.png');
+    }
 
-    // add map click listeners
-    addMapListener(startMap, startMarker, "startLat", "startLng");
-    addMapListener(finishMap, finishMarker, "finishLat", "finishLng");
+    function drawFinishMarker(coords) {
+        return drawMarker(map, coords, 'http://maps.google.com/mapfiles/dd-end.png');
+    }
 
-    function addMapListener(map, marker, latID, lngID) {
-        map.addListener('click', function (event) {
-            var coords = event.latLng;
-            if (marker) {
-                marker.setMap(null);
+
+    // add marker button click listeners
+    var startBtn = document.getElementById('start-marker-btn');
+    var finishBtn = document.getElementById('finish-marker-btn');
+    startBtn.onclick = function () {
+        startBtn.classList.add('active');
+        finishBtn.classList.remove('active');
+    };
+    finishBtn.onclick = function () {
+        finishBtn.classList.add('active');
+        startBtn.classList.remove('active');
+    };
+    startBtn.click();
+
+
+    // add map click listener
+    map.addListener('click', function (event) {
+        var coords = event.latLng;
+        var isFinishBtnActive = finishBtn.classList.contains('active');
+        var latID = isFinishBtnActive ? "finishLat" : "startLat";
+        var lngID = isFinishBtnActive ? "finishLng" : "startLng";
+
+        if (isFinishBtnActive) {
+            if (finishMarker) {
+                finishMarker.setMap(null);
             }
-            marker = drawMarker(map, coords);
-            document.getElementById(latID).value = coords.lat();
-            document.getElementById(lngID).value = coords.lng();
-            calculateDistance();
-        });
-    }
+            finishMarker = drawFinishMarker(coords);
+        } else {
+            if (startMarker) {
+                startMarker.setMap(null);
+            }
+            startMarker = drawStartMarker(coords);
+        }
+
+        document.getElementById(latID).value = coords.lat();
+        document.getElementById(lngID).value = coords.lng();
+        calculateDistance();
+    });
+
 
     function calculateDistance() {
         function NanAsNull(val) {

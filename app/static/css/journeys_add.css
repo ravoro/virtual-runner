@@ -1,7 +1,11 @@
-#map-start, #map-finish {
-    min-height: 250px;
+#map-start-finish {
+    min-height: 400px;
 }
 
-#map-start.form-control, #map-finish.form-control {
+#map-start-finish.form-control {
     padding: 0;
+}
+
+#map-start-finish div {
+    cursor: crosshair;
 }
