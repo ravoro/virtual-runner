@@ -15,27 +15,33 @@ class Test(TestCase):
     def setUp(self):
         self.app = create_app(config.TestConfig)
         self.valid_data = MultiDict([
-            ('email', 'test@example.com'),
+            ('email_or_username', 'test@example.com'),
             ('password', 'randompassword')
         ])
+        self.valid_user = User(
+            id=1,
+            email=self.valid_data.get('email_or_username'),
+            username=None,
+            password=self.valid_data.get('password')
+        )
 
-    @patch.object(UserRepo, 'get_by_email')
-    def test_existing_email(self, mock_get_by_email: Mock):
-        """Raise ValidationError when email is already registered."""
-        mock_get_by_email.return_value = User(id=1, **self.valid_data.to_dict())
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_existing_value(self, mock_get: Mock):
+        """Raise ValidationError when value is already registered."""
+        mock_get.return_value = self.valid_user
         with self.app.app_context():
             form = UserRegisterForm(self.valid_data)
         with self.assertRaises(ValidationError):
-            form.validate_email(form, form.email)
+            form.validate_email_or_username(form, form.email_or_username)
 
-    @patch.object(UserRepo, 'get_by_email')
-    def test_new_email(self, mock_get_by_email: Mock):
-        """Do not raise ValidationError when the email is not registered."""
-        mock_get_by_email.return_value = None
+    @patch.object(UserRepo, 'get_by_email_or_username')
+    def test_new_value(self, mock_get: Mock):
+        """Do not raise ValidationError when the value is not registered."""
+        mock_get.return_value = None
         with self.app.app_context():
             form = UserRegisterForm(self.valid_data)
         try:
-            res = form.validate_email(form, form.email)
+            res = form.validate_email_or_username(form, form.email_or_username)
             assert res is None
         except ValidationError:
             self.fail('ValidationError should not be raised')

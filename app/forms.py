@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash
 from wtforms import DecimalField, IntegerField, PasswordField, StringField
-from wtforms.validators import DataRequired, Email, Length, NumberRange, ValidationError
+from wtforms.validators import DataRequired, Length, NumberRange, ValidationError
 
 from .repositories import UserRepo
 
@@ -19,10 +19,12 @@ class JourneyAddStageForm(FlaskForm):
     distance_meters = IntegerField(validators=[NumberRange(min=100)])
 
 
-class UserLoginForm(FlaskForm):
+class BaseAuthForm(FlaskForm):
     email_or_username = StringField(validators=[Length(min=2, max=64)])
     password = PasswordField(validators=[Length(min=8, max=64)])
 
+
+class UserLoginForm(BaseAuthForm):
     def validate(self):
         return super().validate() and self._validate_credentials()
 
@@ -34,11 +36,9 @@ class UserLoginForm(FlaskForm):
         return False
 
 
-class UserRegisterForm(FlaskForm):
-    email = StringField(validators=[Email(), Length(max=64)])
-    password = PasswordField(validators=[Length(min=8, max=64)])
-
+class UserRegisterForm(BaseAuthForm):
     @staticmethod
-    def validate_email(form, field):
-        if UserRepo.get_by_email(field.data) is not None:
-            raise ValidationError('"{}" is already registered. Please choose a different email.'.format(field.data))
+    def validate_email_or_username(form, field):
+        if UserRepo.get_by_email_or_username(field.data) is not None:
+            raise ValidationError(
+                '"{}" is already registered. Please choose a different email or username.'.format(field.data))
