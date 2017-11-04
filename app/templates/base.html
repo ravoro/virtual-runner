@@ -8,7 +8,10 @@
     <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     {% block css %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') | asset_release_version }}" />
     {% endblock %}
 </head>
@@ -55,8 +58,10 @@
 {% endwith %}
 
 {% block js %}
-    <script src="{{ url_for('static', filename='lib/jquery-3.1.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
 {% endblock %}
 </body>
 </html>
