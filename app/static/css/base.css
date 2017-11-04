@@ -76,3 +76,15 @@ html.fullscreen body {
 #page-journeys #stats-table td:first-of-type {
     width: 120px;
 }
+
+#page-journeys-add #map-start-finish {
+    min-height: 400px;
+}
+
+#page-journeys-add #map-start-finish.form-control {
+    padding: 0;
+}
+
+#page-journeys-add #map-start-finish div {
+    cursor: crosshair;
+}

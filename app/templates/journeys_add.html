@@ -6,11 +6,6 @@
 
 {% block body_id %}page-journeys-add{% endblock %}
 
-{% block css %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') | asset_release_version }}" />
-{% endblock %}
-
 {% block js %}
     {{ super() }}
     <script>
