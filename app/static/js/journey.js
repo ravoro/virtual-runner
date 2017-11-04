@@ -37,7 +37,7 @@ function initMap() {
 
     // determine current marker
     var currentCoords = google.maps.geometry.spherical.interpolate(startCoords, finishCoords, fractionCompleted);
-    var currentMarker = new google.maps.Marker({
+    var currentMarker = fractionCompleted == 0 ? startMarker : new google.maps.Marker({
         map: map,
         position: currentCoords,
         title: "Current point"

@@ -1,4 +1,4 @@
-{% from 'utils/fields.html' import field, field_map %}
+{% from 'utils/fields.html' import field %}
 
 {% extends 'base.html' %}
 
@@ -8,7 +8,7 @@
 
 {% block css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') | asset_release_version }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journeys_add.css') | asset_release_version }}" />
 {% endblock %}
 
 {% block js %}
@@ -50,14 +50,34 @@
             </div>
         {% endif %}
 
-        {{ field(form.name, "Name: ") }}
+        {{ field(form.name, label="Name: ", placeholder="Journey Name") }}
 
         {{ form.distance_meters(id="distance-meters", type="hidden") }}
 
-        {{ field_map(form.start_lat, form.start_lng, "Start:", "map-start", "startLat", "startLng") }}
+        {% with has_errors = form.start_lat.errors or form.start_lng.errors or form.finish_lat.errors or form.finish_lng.errors %}
+            <div class="form-group {% if has_errors %}has-error{% endif %}">
+                <label>
+                    {% with btn_class = 'danger' if form.start_lat.errors or form.start_lng.errors else 'default'  %}
+                        <button id="start-marker-btn" class="btn btn-{{ btn_class }}" type="button">Click to select the start location</button>
+                    {% endwith %}
+                    {% with btn_class = 'danger' if form.finish_lat.errors or form.finish_lng.errors else 'default'  %}
+                        <button id="finish-marker-btn" class="btn btn-{{ btn_class }}" type="button">Click to select the finish location</button>
+                    {% endwith %}
+                </label>
+                {% if form.start_lat.errors or form.start_lng.errors  %}
+                    <span class="help-block">Please select a start location.</span>
+                {% endif %}
+                {% if form.finish_lat.errors or form.finish_lng.errors  %}
+                    <span class="help-block">Please select a finish location.</span>
+                {% endif %}
+                <div id="map-start-finish" class="form-control"></div>
+                {{ form.start_lat(id="startLat", class="form-control", type="hidden") }}
+                {{ form.start_lng(id="startLng", class="form-control", type="hidden") }}
+                {{ form.finish_lat(id="finishLat", class="form-control", type="hidden") }}
+                {{ form.finish_lng(id="finishLng", class="form-control", type="hidden") }}
+            </div>
+        {% endwith %}
 
-        {{ field_map(form.finish_lat, form.finish_lng, "Finish:", "map-finish", "finishLat", "finishLng") }}
-
-        <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+        <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
     </form>
 {% endblock %}
