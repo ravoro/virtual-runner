@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {# The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags #}
     <title>{% block page_title %}{% endblock %} - VirtualRunner</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     {% block css %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') | asset_release_version }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') | asset_release_version }}" />
     {% endblock %}
 </head>
 <body id="{% block body_id %}{% endblock %}" class="{% block body_classes %}{% endblock %}">
