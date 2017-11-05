@@ -86,7 +86,7 @@ function setup_virtualenv() {
 function migrate_db() {
     echo -e "\nMigrating any db changes ..."
     cd ${TMP_DIR}
-    ./scripts/migrate.sh config.ProdConfig upgrade
+    ./scripts/migrate.sh wsgi.py upgrade
     cd ${BASE_DIR}
 }
 

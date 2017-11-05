@@ -1,18 +1,14 @@
 #!/bin/bash
-# arg1 = config object to use (ex: "config.DevConfig")
+# arg1 = flask app to use (ex: "wsgi.py")
 # arg2 = action to perform (ex: migrate)
 #
-# example: ./scripts/migrate.sh config.DevConfig migrate
+# example: ./scripts/migrate.sh wsgi.py migrate
 
 if [ $# -ne 2 ]; then
-    echo "please provide config and action as args"
+    echo "please provide flask app and action as args"
     exit
 fi
 
 source venv/bin/activate
-
-export FLASK_CONFIG=$1
-export FLASK_APP="app:app_from_envvar"
-export FLASK_DEBUG=$(python -c "import config; print(1 if $FLASK_CONFIG.DEBUG else 0);")
-
+export FLASK_APP=$1
 flask db $2
