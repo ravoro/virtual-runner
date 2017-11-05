@@ -23,7 +23,7 @@ class BaseConfig:
 
     # Value used for distinguishing newer version of assets to keep browsers from using older cached versions
     # The value is added to the end of the asset URL. Ex: .../main.css?v=146
-    RELEASE_VERSION = None
+    RELEASE_VERSION = os.environ.get('VIRTUALRUNNER_RELEASE_VERSION')
 
 
 class ProdConfig(BaseConfig):
@@ -33,7 +33,7 @@ class ProdConfig(BaseConfig):
 class DevConfig(BaseConfig):
     DEBUG = True
     SECRET_KEY = 'dev-secret-123'
-    SQLALCHEMY_DATABASE_URI = 'mysql://virtualrunner:J6SqvOxROEYPokWA@localhost/virtualrunner'
+    SQLALCHEMY_DATABASE_URI = 'mysql://testuser:testpassword@localhost/testdb'
 
 
 class TestConfig(BaseConfig):
