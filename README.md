@@ -20,8 +20,12 @@ The frontend is minimal and only uses JavaScript for dealing with Google Maps.
 - Install project requirements - `pip install -r requirements.txt`
     - _You should install inside a [virtual environment](https://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs)_
 - Copy the default configuration file `config.example.py` into `config.py` and set any customizations
+- Set up the database schema - `./scripts/migrate.sh wsgi.py migrate`
 - Start a dev server by running the standard `flask run` or custom `./scripts/run_dev.sh`
 - To run on a production WSGI server, use the `wsgi.py` file
+
+## Deployment
+- `./scripts/deploy_latest.sh`
 
 ## Tests
 - Run tests - `./scripts/test.sh`
