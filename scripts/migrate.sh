@@ -9,6 +9,8 @@ if [ $# -ne 2 ]; then
     exit
 fi
 
+source venv/bin/activate
+
 export FLASK_CONFIG=$1
 export FLASK_APP="app:app_from_envvar"
 export FLASK_DEBUG=$(python -c "import config; print(1 if $FLASK_CONFIG.DEBUG else 0);")

@@ -8,4 +8,5 @@ if [ ! -d venv ]; then
 fi
 
 source venv/bin/activate
+
 mypy --strict-optional --ignore-missing-imports app

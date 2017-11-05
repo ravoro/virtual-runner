@@ -19,4 +19,6 @@ if [ "$#" -ne 0 ]; then
     EXEC_TESTS="$@"
 fi
 
+source venv/bin/activate
+
 python -m unittest ${EXEC_TESTS}
