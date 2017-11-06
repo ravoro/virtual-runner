@@ -77,14 +77,17 @@ html.fullscreen body {
     width: 120px;
 }
 
+#page-journeys-add #map-start-finish-container,
 #page-journeys-add #map-start-finish {
     min-height: 400px;
-}
-
-#page-journeys-add #map-start-finish.form-control {
     padding: 0;
 }
 
-#page-journeys-add #map-start-finish div {
-    cursor: crosshair;
+
+#page-journeys-add #map-start-finish-container.start-btn-active div[tabindex] div {
+    cursor: url('http://maps.google.com/mapfiles/dd-start.png') 10 34, crosshair;
+}
+
+#page-journeys-add #map-start-finish-container.finish-btn-active div[tabindex] div {
+    cursor: url('http://maps.google.com/mapfiles/dd-end.png') 10 34, crosshair;
 }

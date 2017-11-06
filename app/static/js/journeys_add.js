@@ -5,8 +5,8 @@ function initMap() {
 
 
     // create map
-    var mapID = "map-start-finish";
-    var map = new google.maps.Map(document.getElementById(mapID), {
+    var mapContainer = document.getElementById("map-start-finish-container");
+    var map = new google.maps.Map(mapContainer.querySelector("#map-start-finish"), {
         zoom: 8,
         center: startCoords || defaultCoords
     });
@@ -39,10 +39,14 @@ function initMap() {
     startBtn.onclick = function () {
         startBtn.classList.add('active');
         finishBtn.classList.remove('active');
+        mapContainer.classList.add('start-btn-active');
+        mapContainer.classList.remove('finish-btn-active');
     };
     finishBtn.onclick = function () {
         finishBtn.classList.add('active');
         startBtn.classList.remove('active');
+        mapContainer.classList.add('finish-btn-active');
+        mapContainer.classList.remove('start-btn-active');
     };
     startBtn.click();
 

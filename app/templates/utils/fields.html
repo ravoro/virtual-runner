@@ -18,17 +18,3 @@
         {{ f }}
     {% endif %}
 {% endmacro %}
-
-{% macro field_map(lat, lng, label, map_id, lat_id, lng_id) %}
-    {% with has_errors = lat.errors or lng.errors %}
-        <div class="form-group {% if has_errors %}has-error{% endif %}">
-            <label>{{ label }}</label>
-            <div id="{{ map_id }}" class="form-control"></div>
-            {{ lat(id=lat_id, class="form-control", type="hidden") }}
-            {{ lng(id=lng_id, class="form-control", type="hidden") }}
-            {% if has_errors %}
-                <span class="help-block">Click on the map to select a location.</span>
-            {% endif %}
-        </div>
-    {% endwith %}
-{% endmacro %}
