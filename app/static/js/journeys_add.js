@@ -10,6 +10,7 @@ function initMap() {
         zoom: 8,
         center: startCoords || defaultCoords
     });
+    zoomMapToContainCoords(map, startCoords, finishCoords);
 
 
     // create markers

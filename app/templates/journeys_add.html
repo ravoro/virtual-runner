@@ -16,6 +16,7 @@
         var startCoords = {{ coords(form.start_lat.data, form.start_lng.data) }};
         var finishCoords = {{ coords(form.finish_lat.data, form.finish_lng.data) }};
     </script>
+    <script src="{{ url_for('static', filename='js/base.js') | asset_release_version }}"></script>
     <script src="{{ url_for('static', filename='js/journeys_add.js') | asset_release_version }}"></script>
     {% with %}
         {% set base_url = "https://maps.googleapis.com/maps/api/js" %}
