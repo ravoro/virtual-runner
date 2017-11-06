@@ -17,8 +17,8 @@
             </div>
         {% endif %}
 
-        {{ field(form.distance_meters, label=" ", placeholder="Distance in meters", addon="meters") }}
+        {{ field(form.distance_meters, label=None, placeholder="Distance in meters", addon="meters") }}
 
-        <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+        <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
     </form>
 {% endblock %}
